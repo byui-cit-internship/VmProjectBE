@@ -6,7 +6,7 @@ using DatabaseVmProject.Models;
 using Database_VmProject.Services;
 using System.Linq;
 
-namespace Database_VmProject.Controllers.v2
+namespace DatabaseVmProject.Controllers.v2
 {
     [Authorize]
     [Route("api/v2/[controller]")]
@@ -41,7 +41,7 @@ namespace Database_VmProject.Controllers.v2
             [FromQuery] int? vmTemplateId,
             [FromQuery] string vmTemplateVcenterId,
             [FromQuery] string vmTemplateName,
-            [FromQuery] DateTime VmTemplateAccessDate)
+            [FromQuery] DateTime? VmTemplateAccessDate)
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using DatabaseVmProject.Services;
 using DatabaseVmProject.Models;
 
-namespace Database_VmProject.Controllers.v1
+namespace DatabaseVmProject.Controllers.v1
 {
     [Authorize]
     [Route("api/v1/[controller]")]

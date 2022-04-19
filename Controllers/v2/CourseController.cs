@@ -6,7 +6,7 @@ using DatabaseVmProject.Models;
 using Database_VmProject.Services;
 using System.Linq;
 
-namespace Database_VmProject.Controllers.v2
+namespace DatabaseVmProject.Controllers.v2
 {
     [Authorize]
     [Route("api/v2/[controller]")]
@@ -72,6 +72,11 @@ namespace Database_VmProject.Controllers.v2
                                 return Ok(
                                     (from c in _context.Courses
                                      where c.CourseId == courseId
+                                     select c).FirstOrDefault());
+                            case "courseName":
+                                return Ok(
+                                    (from c in _context.Courses
+                                     where c.CourseName == courseName
                                      select c).FirstOrDefault());
 
                             default:

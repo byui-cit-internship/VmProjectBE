@@ -5,8 +5,9 @@ using DatabaseVmProject.Services;
 using DatabaseVmProject.Models;
 using Database_VmProject.Services;
 using System.Linq;
+using System.Reflection;
 
-namespace Database_VmProject.Controllers.v2
+namespace DatabaseVmProject.Controllers.v2
 {
     [Authorize]
     [Route("api/v2/[controller]")]
@@ -143,13 +144,23 @@ namespace Database_VmProject.Controllers.v2
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
 
+            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+
+            // Returns a professor user or null if email is not associated with a professor
+            User professor = _auth.getAdmin(userId);
             // Returns a professor user or null if email is not associated with a professor
 
-            if (isSystem)
+            if (isSystem || professor != null)
             {
                 try
                 {
-                    _context.Users.Update(user);
+                    User toModify = _context.Users.Find(user.UserId);
+                    PropertyInfo[] userProperties = user.GetType().GetProperties();
+                    foreach (PropertyInfo property in userProperties)
+                    {
+                        property.SetValue(user, property.GetValue(toModify));
+                    }
+                    _context.Users.Update(toModify);
                     _context.SaveChanges();
                     return Ok(user);
                 }

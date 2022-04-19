@@ -5,7 +5,7 @@ using DatabaseVmProject.Services;
 using DatabaseVmProject.Models;
 using Database_VmProject.Services;
 
-namespace Database_VmProject.Controllers.v2
+namespace DatabaseVmProject.Controllers.v2
 {
     [Authorize]
     [Route("api/v2/[controller]")]
