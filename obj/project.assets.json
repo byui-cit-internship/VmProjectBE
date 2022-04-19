@@ -5788,23 +5788,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Michael\\.nuget\\packages\\": {},
+    "C:\\Users\\michael.EBENAL\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Michael\\source\\repos\\Database-VmProject-API\\DatabaseVmProject.csproj",
+      "projectUniqueName": "C:\\Users\\michael.EBENAL\\source\\repos\\Database-VmProject-API\\DatabaseVmProject.csproj",
       "projectName": "DatabaseVmProject",
-      "projectPath": "C:\\Users\\Michael\\source\\repos\\Database-VmProject-API\\DatabaseVmProject.csproj",
-      "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Michael\\source\\repos\\Database-VmProject-API\\obj\\",
+      "projectPath": "C:\\Users\\michael.EBENAL\\source\\repos\\Database-VmProject-API\\DatabaseVmProject.csproj",
+      "packagesPath": "C:\\Users\\michael.EBENAL\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\michael.EBENAL\\source\\repos\\Database-VmProject-API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Michael\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\michael.EBENAL\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5890,7 +5890,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

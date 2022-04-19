@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Database_VmProject</RootNamespace>
+    <RootNamespace>DatabaseVmProject</RootNamespace>
     <UserSecretsId>5f09a389-1e44-4c08-b14e-5497bb5a2180</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>

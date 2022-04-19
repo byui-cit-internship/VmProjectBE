@@ -1,4 +1,4 @@
-﻿namespace DatabaseVmProject.Controllers.v1
+﻿namespace DatabaseVmProject.DTO.v1
 {
     public class SectionDTO
     {
