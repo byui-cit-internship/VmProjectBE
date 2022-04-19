@@ -19,7 +19,11 @@ namespace DatabaseVmProject.Controllers
         public IHttpClientFactory _httpClientFactory { get; }
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TokenController(VmEntities context, ILogger<TokenController> logger, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+        public TokenController(
+            VmEntities context,
+            ILogger<TokenController> logger,
+            IHttpClientFactory httpClientFactory,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _logger = logger;
@@ -37,6 +41,16 @@ namespace DatabaseVmProject.Controllers
         {
             try
             {
+                DTO.AccessToken backendCookie = new();
+                backendCookie.CookieName = ".VMProject.Session";
+                backendCookie.CookieValue = _httpContextAccessor.HttpContext.Request.Cookies[accessTokenObj.CookieName];
+                backendCookie.SiteFrom = "BE";
+
+                if (backendCookie.CookieValue == null)
+                {
+                    return StatusCode(500, "Session cookie not set. Try again.");
+                }
+
                 if (accessTokenObj.AccessTokenValue == Environment.GetEnvironmentVariable("BFF_PASSWORD"))
                 {
                     _httpContextAccessor.HttpContext.Session.SetString("tokenId", Environment.GetEnvironmentVariable("BFF_PASSWORD"));
@@ -111,11 +125,28 @@ namespace DatabaseVmProject.Controllers
                         return Forbid();
                     }
 
+                    Cookie beCookie = new();
+                    beCookie.CookieName = backendCookie.CookieName;
+                    beCookie.CookieValue = backendCookie.CookieValue;
+                    beCookie.SiteFrom = backendCookie.SiteFrom;
+                    beCookie.SessionTokenId = sessionToken.SessionTokenId;
+                    _context.Cookies.Add(beCookie);
+
+                    Cookie bffCookie = new();
+                    bffCookie.CookieName = accessTokenObj.CookieName;
+                    bffCookie.CookieValue = accessTokenObj.CookieValue;
+                    bffCookie.SiteFrom = accessTokenObj.SiteFrom;
+                    bffCookie.SessionTokenId = sessionToken.SessionTokenId;
+
+                    _context.Cookies.Add(bffCookie);
+                    _context.SaveChanges();
+
+                    _httpContextAccessor.HttpContext.Session.SetString("BESessionCookie", $"{beCookie.CookieName}={beCookie.CookieValue}");
                     _httpContextAccessor.HttpContext.Session.SetString("tokenId", sessionToken.SessionTokenValue.ToString());
                     _httpContextAccessor.HttpContext.Session.SetString("userId", user.UserId.ToString());
 
                     // outside return statment
-                    return Ok(user);
+                    return Ok((user, sessionToken.SessionTokenValue.ToString()));
                 }
                 else
                 {

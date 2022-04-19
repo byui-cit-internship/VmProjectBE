@@ -22,6 +22,7 @@ namespace DatabaseVmProject.DAL
         }
 
         public DbSet<AccessToken> AccessTokens { get; set; }
+        public DbSet<Cookie> Cookies { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<FolderUser> FolderUsers { get; set; }
