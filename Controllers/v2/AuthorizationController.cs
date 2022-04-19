@@ -16,7 +16,11 @@ namespace DatabaseVmProject.Controllers.v1
         private readonly IWebHostEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthorizationController(VmEntities context, ILogger<AuthorizationController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
+        public AuthorizationController(
+            VmEntities context, 
+            ILogger<AuthorizationController> logger,
+            IHttpContextAccessor httpContextAccessor,
+            IWebHostEnvironment env)
         {
             _context = context;
             _logger = logger;
