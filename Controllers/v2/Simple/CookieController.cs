@@ -43,7 +43,8 @@ namespace DatabaseVmProject.Controllers.v2
             [FromQuery] int? sessionTokenId,
             [FromQuery] string cookieName,
             [FromQuery] string cookieValue,
-            [FromQuery] string siteFrom)
+            [FromQuery] string siteFrom,
+            [FromQuery] string sessionTokenValue)
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
@@ -54,14 +55,15 @@ namespace DatabaseVmProject.Controllers.v2
             User professor = _auth.getAdmin(accessUserId);
             // Returns a professor user or null if email is not associated with a professor
 
-            if (isSystem || professor != null)
-            {
+            //if (isSystem || professor != null)
+            //{
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("cookieId", cookieId),
                     ("sessionTokenId", sessionTokenId),
                     ("cookieName", cookieName),
                     ("cookieValue", cookieValue),
-                    ("siteFrom", siteFrom));
+                    ("siteFrom", siteFrom),
+                    ("sessionTokenValue", sessionTokenValue));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -125,7 +127,7 @@ namespace DatabaseVmProject.Controllers.v2
                                     (from c in _context.Cookies
                                      where c.SessionTokenId == sessionTokenId
                                      && c.SiteFrom == siteFrom
-                                     select c).FirstOrDefault());
+                                     select c).ToList());
                             case bool ifTrue when
                                 validParameters.Contains("cookieName") &&
                                 validParameters.Contains("cookieValue"):
@@ -133,22 +135,48 @@ namespace DatabaseVmProject.Controllers.v2
                                     (from c in _context.Cookies
                                      where c.CookieName == cookieName
                                          && c.CookieValue == cookieValue
-                                     select c).FirstOrDefault());
+                                     select c).ToList());
                             case bool ifTrue when
                                 validParameters.Contains("cookieName") &&
-                                validParameters.Contains("cookieValue"):
+                                validParameters.Contains("siteFrom"):
                                 return Ok(
                                     (from c in _context.Cookies
                                      where c.CookieName == cookieName
-                                         && c.CookieValue == cookieValue
+                                         && c.SiteFrom == siteFrom
+                                     select c).ToList());
+                            case bool ifTrue when
+                                validParameters.Contains("cookieValue") &&
+                                validParameters.Contains("siteFrom"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieValue == cookieValue
+                                         && c.SiteFrom == siteFrom
                                      select c).FirstOrDefault());
+                        case bool ifTrue when
+                                validParameters.Contains("siteFrom") &&
+                                validParameters.Contains("sessionTokenValue"):
+                            return Ok(
+                                (from c in _context.Cookies
+                                 join st in _context.SessionTokens
+                                 on c.SessionTokenId equals st.SessionTokenId
+                                 where c.SiteFrom == siteFrom
+                                     && st.SessionTokenValue == Guid.Parse(sessionTokenValue)
+                                 select c).FirstOrDefault());
+                        default:
+                                return BadRequest("How did you get here?");
+                        }
+                    case 3:
+                        switch (true)
+                        {
                             case bool ifTrue when
                                 validParameters.Contains("cookieName") &&
-                                validParameters.Contains("cookieValue"):
+                                validParameters.Contains("cookieValue") &&
+                                validParameters.Contains("siteFrom"):
                                 return Ok(
                                     (from c in _context.Cookies
                                      where c.CookieName == cookieName
-                                         && c.CookieValue == cookieValue
+                                     && c.CookieValue == cookieValue
+                                     && c.SiteFrom == siteFrom
                                      select c).FirstOrDefault());
                             default:
                                 return BadRequest("How did you get here?");
@@ -156,11 +184,11 @@ namespace DatabaseVmProject.Controllers.v2
                     default:
                         return BadRequest("Incorrect parameters entered");
                 }
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 return NotFound("Only the BFF application has access to this resource.");
-            }
+            //}
         }
 
         /****************************************
@@ -219,7 +247,8 @@ namespace DatabaseVmProject.Controllers.v2
                     Cookie toModify = (from c in _context.Cookies
                                        where c.SiteFrom == cookie.SiteFrom
                                        && c.CookieName == cookie.CookieName
-                                       && c.SessionTokenId == cookie.SessionTokenId).FirstOrDefault();
+                                       && c.SessionTokenId == cookie.SessionTokenId
+                                       select c).FirstOrDefault();
                     PropertyInfo[] cookieProperties = cookie.GetType().GetProperties();
                     foreach (PropertyInfo property in cookieProperties)
                     {

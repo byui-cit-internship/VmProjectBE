@@ -21,11 +21,11 @@ namespace DatabaseVmProject.Models
         public string CookieName { get; set; }
 
         [Required]
-        [Column("cookie_value", TypeName = "varchar(100)", Order = 4)]
+        [Column("cookie_value", TypeName = "varchar(300)", Order = 4)]
         public string CookieValue { get; set; }
 
         [Required]
-        [Column("site_from", Order = 5)]
+        [Column("site_from", TypeName = "varchar(20)", Order = 5)]
         public string SiteFrom { get; set; }
 
 

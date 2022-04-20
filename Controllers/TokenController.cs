@@ -43,7 +43,7 @@ namespace DatabaseVmProject.Controllers
             {
                 DTO.AccessToken backendCookie = new();
                 backendCookie.CookieName = ".VMProject.Session";
-                backendCookie.CookieValue = _httpContextAccessor.HttpContext.Request.Cookies[accessTokenObj.CookieName];
+                backendCookie.CookieValue = _httpContextAccessor.HttpContext.Request.Cookies[backendCookie.CookieName];
                 backendCookie.SiteFrom = "BE";
 
                 if (backendCookie.CookieValue == null)
@@ -142,7 +142,7 @@ namespace DatabaseVmProject.Controllers
                     _context.SaveChanges();
 
                     _httpContextAccessor.HttpContext.Session.SetString("BESessionCookie", $"{beCookie.CookieName}={beCookie.CookieValue}");
-                    _httpContextAccessor.HttpContext.Session.SetString("tokenId", sessionToken.SessionTokenValue.ToString());
+                    _httpContextAccessor.HttpContext.Session.SetString("sessionTokenValue", sessionToken.SessionTokenValue.ToString());
                     _httpContextAccessor.HttpContext.Session.SetString("userId", user.UserId.ToString());
 
                     // outside return statment
