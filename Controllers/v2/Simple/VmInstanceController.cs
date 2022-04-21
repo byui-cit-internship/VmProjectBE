@@ -11,17 +11,17 @@ namespace DatabaseVmProject.Controllers.v2
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class VmTemplateController : ControllerBase
+    public class VmInstanceController : ControllerBase
     {
         private readonly VmEntities _context;
-        private readonly ILogger<VmTemplateController> _logger;
+        private readonly ILogger<VmInstanceController> _logger;
         private readonly Authorization _auth;
         private readonly IWebHostEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VmTemplateController(
+        public VmInstanceController(
             VmEntities context,
-            ILogger<VmTemplateController> logger,
+            ILogger<VmInstanceController> logger,
             IHttpContextAccessor httpContextAccessor,
             IWebHostEnvironment env)
         {
@@ -38,10 +38,10 @@ namespace DatabaseVmProject.Controllers.v2
         ****************************************/
         [HttpGet("")]
         public async Task<ActionResult> GetVmTemplate(
+            [FromQuery] int? vmInstanceId,
             [FromQuery] int? vmTemplateId,
-            [FromQuery] string vmTemplateVcenterId,
-            [FromQuery] string vmTemplateName,
-            [FromQuery] DateTime? vmTemplateAccessDate)
+            [FromQuery] string vmInstanceVcenterId,
+            [FromQuery] DateTime? vmInstanceExpireDate)
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
@@ -49,40 +49,40 @@ namespace DatabaseVmProject.Controllers.v2
             int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
             // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getUser(userId);
+            User professor = _auth.getAdmin(userId);
             // Returns a professor user or null if email is not associated with a professor
 
             if (isSystem || professor != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
+                    ("vmInstanceId", vmInstanceId),
                     ("vmTemplateId", vmTemplateId),
-                    ("vmTemplateVcenterId", vmTemplateVcenterId),
-                    ("vmTemplateName", vmTemplateName),
-                    ("vmTemplateAccessDate", vmTemplateAccessDate));
+                    ("vmInstanceVcenterId", vmInstanceVcenterId),
+                    ("vmInstanceExpireDate", vmInstanceExpireDate));
                 switch (validParameters.Count)
                 {
                     case 0:
                         return Ok(
-                            (from vt in _context.VmTemplates
-                             select vt).ToList());
+                            (from vi in _context.VmInstances
+                             select vi).ToList());
                     case 1:
                         switch (validParameters[0])
                         {
+                            case "vmInstanceId":
+                                return Ok(
+                                    (from vi in _context.VmInstances
+                                     where vi.VmInstanceId == vmInstanceId
+                                     select vi).FirstOrDefault());
                             case "vmTemplateId":
                                 return Ok(
-                                    (from vt in _context.VmTemplates
-                                     where vt.VmTemplateId == vmTemplateId 
-                                     select vt).FirstOrDefault());
-                            case "vmTemplateVcenterId":
+                                    (from vi in _context.VmInstances
+                                     where vi.VmTemplateId == vmTemplateId
+                                     select vi).ToList());
+                            case "vmInstanceVcenterId":
                                 return Ok(
-                                    (from vt in _context.VmTemplates
-                                     where vt.VmTemplateVcenterId == vmTemplateVcenterId
-                                     select vt).FirstOrDefault());
-                            case "vmTemplateName":
-                                return Ok(
-                                    (from vt in _context.VmTemplates
-                                     where vt.VmTemplateName == vmTemplateName
-                                     select vt).FirstOrDefault());
+                                    (from vi in _context.VmInstances
+                                     where vi.VmInstanceVcenterId == vmInstanceVcenterId
+                                     select vi).FirstOrDefault());
                             default:
                                 return BadRequest("Invalid single parameter. Check documentation.");
                         }
@@ -100,7 +100,7 @@ namespace DatabaseVmProject.Controllers.v2
 
         ****************************************/
         [HttpPost("")]
-        public async Task<ActionResult> PostVmTemplate([FromBody] VmTemplate vmTemplate)
+        public async Task<ActionResult> PostVmInstance([FromBody] VmInstance vmInstance)
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
@@ -108,16 +108,16 @@ namespace DatabaseVmProject.Controllers.v2
             int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
             // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(userId);
+            User user = _auth.getUser(userId);
             // Returns a professor user or null if email is not associated with a professor
 
-            if (isSystem || professor != null)
+            if (isSystem || user != null)
             {
                 try
                 {
-                    _context.VmTemplates.Add(vmTemplate);
+                    _context.VmInstances.Add(vmInstance);
                     _context.SaveChanges();
-                    return Ok(vmTemplate);
+                    return Ok(vmInstance);
                 }
                 catch (Exception ex)
                 {

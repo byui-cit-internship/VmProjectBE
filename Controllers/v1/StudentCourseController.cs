@@ -34,7 +34,7 @@ namespace DatabaseVmProject.Controllers.v1
         /****************************************
         Returns secions taught by a professor in a given semester
         ****************************************/
-        [HttpGet("courseList")]
+        [HttpGet("")]
         public async Task<ActionResult> GetCourseListByUserId([FromQuery] int queryUserId)
         {
             // Gets email from session
