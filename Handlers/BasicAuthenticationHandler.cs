@@ -45,27 +45,27 @@ namespace DatabaseVmProject.Handlers
             string storedCookie = _httpContextAccessor.HttpContext.Session.GetString("BESessionCookie");
             string requestCookie = _httpContextAccessor.HttpContext.Request.Cookies[".VMProject.Session"] != null ? $".VMProject.Session={_httpContextAccessor.HttpContext.Request.Cookies[".VMProject.Session"]}" : null;
 
-            if ((storedCookie == null && requestCookie == null) || requestCookie == null)
+            if (storedCookie == requestCookie && storedCookie != null)
+            {
+                User user = (from st in _context.SessionTokens
+                             join at in _context.AccessTokens
+                             on st.AccessTokenId equals at.AccessTokenId
+                             join u in _context.Users
+                             on at.UserId equals u.UserId
+                             where st.SessionTokenValue == Guid.Parse(sessionTokenValue)
+                             select u).FirstOrDefault();
+                if (user != null)
+                {
+                    return SuccessResult(user.Email);
+                }
+            }
+            else if (storedCookie == null && requestCookie == null)
             {
                 return AuthenticateResult.Fail("No session established");
             }
             else if (requestCookie != null)
             {
-                if (storedCookie == requestCookie)
-                {
-                    User user = (from st in _context.SessionTokens
-                                 join at in _context.AccessTokens
-                                 on st.AccessTokenId equals at.AccessTokenId
-                                 join u in _context.Users
-                                 on at.UserId equals u.UserId
-                                 where st.SessionTokenValue == Guid.Parse(sessionTokenValue)
-                                 select u).FirstOrDefault();
-                    if (user != null)
-                    {
-                        return SuccessResult(user.Email);
-                    }
-                }
-                else
+                if (storedCookie == null)
                 {
                     string[] cookieParts = requestCookie.Split('=', 2);
                     Cookie dbCookie = (from c in _context.Cookies
@@ -73,7 +73,8 @@ namespace DatabaseVmProject.Handlers
                                        && c.CookieValue == cookieParts[1]
                                        && c.SiteFrom == "BE"
                                        select c).FirstOrDefault();
-                    if (dbCookie != null && storedCookie == null)
+
+                    if (dbCookie != null)
                     {
                         UserSession userSession = (from c in _context.Cookies
                                                    join st in _context.SessionTokens
@@ -93,12 +94,19 @@ namespace DatabaseVmProject.Handlers
 
                         return SuccessResult(userSession.User.Email);
                     }
-                    else if (sessionTokenValue != null && dbCookie != null)
+                }
+                else if (storedCookie != null)
+                {
+                    string[] cookiePartsStored = storedCookie.Split('=', 2);
+                    string[] cookiePartsRequest = requestCookie.Split('=', 2);
+                    Cookie dbCookie = (from c in _context.Cookies
+                                       where c.CookieName == cookiePartsStored[0]
+                                       && c.CookieValue == cookiePartsStored[1]
+                                       && c.SiteFrom == "BE"
+                                       select c).FirstOrDefault();
+                    if (dbCookie != null)
                     {
-                        dbCookie.CookieValue = requestCookie.Split('=', 2)[1];
-                        _context.Cookies.Update(dbCookie);
-                        _context.SaveChanges();
-
+                        dbCookie.CookieValue = cookiePartsRequest[1];
                         User user = (from st in _context.SessionTokens
                                      join at in _context.AccessTokens
                                      on st.AccessTokenId equals at.AccessTokenId
@@ -108,18 +116,12 @@ namespace DatabaseVmProject.Handlers
                                      select u).FirstOrDefault();
                         if (user != null)
                         {
-                            _httpContextAccessor.HttpContext.Session.SetString("BESessionCookie", $"{dbCookie.CookieName}={dbCookie.CookieValue}");
-
                             return SuccessResult(user.Email);
                         }
                     }
                 }
-                return AuthenticateResult.Fail("Test123");
             }
-            else
-            {
-                return AuthenticateResult.Fail("No session token");
-            }
+            return AuthenticateResult.Fail("No session token");
         }
 
         public AuthenticateResult SuccessResult(string name)

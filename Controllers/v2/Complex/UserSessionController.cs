@@ -39,6 +39,7 @@ namespace DatabaseVmProject.Controllers.v2
 
         ****************************************/
         [HttpGet("")]
+        [AllowAnonymous]
         public async Task<ActionResult> GetUserSession(
             [FromQuery] int? userId,
             [FromQuery] int? sessionTokenId,
@@ -48,12 +49,12 @@ namespace DatabaseVmProject.Controllers.v2
             [FromQuery] string siteFrom)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            //bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
 
-            int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            //int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
             // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(accessUserId);
+           // User professor = _auth.getAdmin(accessUserId);
             // Returns a professor user or null if email is not associated with a professor
 
             //if (isSystem || professor != null)
