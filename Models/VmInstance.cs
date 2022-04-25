@@ -10,7 +10,7 @@ namespace DatabaseVmProject.Models
     {
         [Key]
         [Column("vm_instance_id", Order = 1)]
-        public int VmUserInstanceId { get; set; }
+        public int VmInstanceId { get; set; }
 
         [Required]
         [Column("vm_template_id", Order = 2)]
@@ -18,11 +18,11 @@ namespace DatabaseVmProject.Models
 
         [Required]
         [Column("vm_instance_vcenter_id", TypeName = "varchar(50)", Order = 3)]
-        public string VmUserInstanceVcenterId { get; set; }
+        public string VmInstanceVcenterId { get; set; }
 
         [Required]
         [Column("vm_instance_expire_date", TypeName = "datetime2(7)", Order = 4)]
-        public DateTime vm_user_instance_expire_date { get; set; }
+        public DateTime VmInstanceExpireDate { get; set; }
 
 
         [ForeignKey("VmTemplateId")]

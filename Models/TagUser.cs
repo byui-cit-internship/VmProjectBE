@@ -8,7 +8,7 @@ namespace DatabaseVmProject.Models
     public class TagUser
     {
         [Key]
-        [Column("tag)_user_id", Order = 1)]
+        [Column("tag_user_id", Order = 1)]
         public int TagUserId { get; set; }
 
         [Required]
