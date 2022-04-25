@@ -4,7 +4,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using DatabaseVmProject.DAL;
 using DatabaseVmProject.Models;
-
+using DatabaseVmProject.DTO;
 
 namespace DatabaseVmProject.Controllers
 {
@@ -37,11 +37,11 @@ namespace DatabaseVmProject.Controllers
         ****************************************/
         [HttpPost()]
         [AllowAnonymous]
-        public async Task<ActionResult> PostToken([FromBody] DTO.AccessToken accessTokenObj)
+        public async Task<ActionResult> PostToken([FromBody] AccessTokenDTO accessTokenObj)
         {
             try
             {
-                DTO.AccessToken backendCookie = new();
+                AccessTokenDTO backendCookie = new();
                 backendCookie.CookieName = ".VMProject.Session";
                 backendCookie.CookieValue = _httpContextAccessor.HttpContext.Request.Cookies[backendCookie.CookieName];
                 backendCookie.SiteFrom = "BE";

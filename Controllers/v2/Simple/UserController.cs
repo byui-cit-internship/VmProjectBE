@@ -43,12 +43,11 @@ namespace DatabaseVmProject.Controllers.v2
             [FromQuery] string firstName,
             [FromQuery] string lastName,
             [FromQuery] string email,
-            [FromQuery] bool isAdmin,
+            [FromQuery] bool? isAdmin,
             [FromQuery] string canvasToken)
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
-
             int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
             // Returns a professor user or null if email is not associated with a professor

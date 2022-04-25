@@ -1,6 +1,6 @@
 ﻿namespace DatabaseVmProject.DTO
 {
-    public class AccessToken
+    public class AccessTokenDTO
     {
         public string AccessTokenValue { get; set; }
         public string CookieValue { get; set; }
