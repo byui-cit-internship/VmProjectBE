@@ -17,7 +17,7 @@ spec:
         env:
         - name: APSNETCORE_ENVIRONMENT
           value: Development
-        image: gcr.io/constellation-275522/vmproject-be
+        image: rcr.citwdd.net/database-repository/database-vima:latest
         ports:
         - containerPort: 80        
         resources:
