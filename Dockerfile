@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Database-VmProject.csproj", "."]
+COPY ["DatabaseVmProject.csproj", "."]
 RUN dotnet restore "./DatabaseVmProject.csproj"
 COPY . .
 WORKDIR "/src/."
