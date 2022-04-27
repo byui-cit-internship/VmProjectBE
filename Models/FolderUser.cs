@@ -17,7 +17,7 @@ namespace DatabaseVmProject.Models
         public int FolderId { get; set; }
 
         [Column("user_id", Order = 3)]
-        public int user_id { get; set; }
+        public int UserId { get; set; }
 
 
         [ForeignKey("FolderId")]

@@ -21,11 +21,11 @@ namespace DatabaseVmProject.Models
         public string CourseName { get; set; }
 
         [Required]
-        [Column("resource_group_template_id", Order = 4)]
-        public int ResourceGroupTemplateId { get; set; }
+        [Column("resource_group_id", Order = 4)]
+        public int ResourceGroupId { get; set; }
 
 
-        [ForeignKey("ResourceGroupTemplateId")]
-        public ResourceGroupTemplate ResourceGroupTemplate { get; set; }
+        [ForeignKey("ResourceGroupId")]
+        public ResourceGroup ResourceGroup { get; set; }
     }
 }

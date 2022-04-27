@@ -13,10 +13,18 @@ namespace DatabaseVmProject.Models
         public int ResourceGroupId { get; set; }
 
         [Required]
-        [Column("memory", TypeName = "float", Order = 2)]
+        [Column("resource_group_name", TypeName = "varchar(20)", Order = 2)]
+        public string ResourceGroupName { get; set; }
+
+        [Column("resource_group_vsphere_id", TypeName = "varchar(15)", Order = 3)]
+        public string ResourceGroupVsphereId { get; set; }
+
+        [Required]
+        [Column("memory", TypeName = "float", Order = 4)]
         public double Memory { get; set; }
 
-        [Column("cpu", TypeName = "float", Order = 3)]
+        [Required]
+        [Column("cpu", TypeName = "float", Order = 5)]
         public double Cpu { get; set; }
     }
 }

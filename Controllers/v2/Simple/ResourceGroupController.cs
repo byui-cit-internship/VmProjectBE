@@ -39,6 +39,7 @@ namespace DatabaseVmProject.Controllers.v2
         [HttpGet("")]
         public async Task<ActionResult> GetResourceGroup(
             [FromQuery] int? resourceGroupId,
+            [FromQuery] string resourceGroupName,
             [FromQuery] double? memory,
             [FromQuery] double? cpu)
         {
@@ -55,6 +56,7 @@ namespace DatabaseVmProject.Controllers.v2
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("resourceGroupId", resourceGroupId),
+                    ("resourceGroupName", resourceGroupName),
                     ("memory", memory),
                     ("cpu", cpu));
                 switch (validParameters.Count)
@@ -74,16 +76,18 @@ namespace DatabaseVmProject.Controllers.v2
                             default:
                                 return BadRequest("Incorrect parameters entered");
                         }
-                    case 2:
+                    case 3:
                         switch (true)
                         {
                             case bool ifTrue when
                             validParameters.Contains("memory") &&
-                            validParameters.Contains("cpu"):
+                            validParameters.Contains("cpu") &&
+                            validParameters.Contains("resourceGroupName"):
                                 return Ok(
                                     (from rg in _context.ResourceGroups
                                      where rg.Memory.Equals(memory)
                                      && rg.Cpu.Equals(cpu)
+                                     && rg.ResourceGroupName == resourceGroupName
                                      select rg).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");

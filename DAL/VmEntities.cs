@@ -30,7 +30,6 @@ namespace DatabaseVmProject.DAL
         public DbSet<GroupMembership> GroupMemberships { get; set; }
         public DbSet<IpAddress> IpAddresses { get; set; }
         public DbSet<ResourceGroup> ResourceGroups { get; set; }
-        public DbSet<ResourceGroupTemplate> ResourceGroupTemplates { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Semester> Semesters { get; set; }

@@ -12,7 +12,7 @@ namespace DatabaseVmProject.Models
         [Column("cookie_id", Order = 1)]
         public int CookieId { get; set; }
 
-
+        [Required]
         [Column("session_token_id", Order = 2)]
         public int SessionTokenId { get; set; }
 
