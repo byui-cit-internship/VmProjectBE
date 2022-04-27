@@ -90,7 +90,7 @@ spec:
     - port: 80
       targetPort: 80
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: vmproject-be-dev-ingress
@@ -109,9 +109,6 @@ spec:
     http:
       paths:
       - backend:
-          service:
-            name: vmproject-be-api-dev-nodeport
-            port: 
-              number: 80
-        pathType: ImplementationSpecific
+          serviceName: vmproject-be-api-dev-nodeport
+          serivePort: 80
             
