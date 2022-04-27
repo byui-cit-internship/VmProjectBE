@@ -1,7 +1,5 @@
-using DatabaseVmProject.Services;
 using Microsoft.EntityFrameworkCore;
 using DatabaseVmProject.DAL;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace DatabaseVmProject
 {
@@ -9,7 +7,6 @@ namespace DatabaseVmProject
     {
         public static void Main(string[] args)
         {
-
             IHost host = CreateHostBuilder(args).Build();
 
             IServiceProvider services = host.Services.CreateScope().ServiceProvider;

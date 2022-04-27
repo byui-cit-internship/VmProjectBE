@@ -157,7 +157,7 @@ namespace DatabaseVmProject.Controllers.v2
                     PropertyInfo[] userProperties = user.GetType().GetProperties();
                     foreach (PropertyInfo property in userProperties)
                     {
-                        property.SetValue(user, property.GetValue(toModify));
+                        property.SetValue(toModify, property.GetValue(user));
                     }
                     _context.Users.Update(toModify);
                     _context.SaveChanges();
