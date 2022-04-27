@@ -110,5 +110,5 @@ spec:
       paths:
       - backend:
           serviceName: vmproject-be-api-dev-nodeport
-          serivePort: 80
+          servicePort: 80
             
