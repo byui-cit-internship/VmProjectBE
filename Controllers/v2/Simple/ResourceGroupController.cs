@@ -68,11 +68,16 @@ namespace DatabaseVmProject.Controllers.v2
                     case 1:
                         switch (validParameters[0])
                         {
-                            case "resourceGroupTemplateId":
+                            case "resourceGroupId":
                                 return Ok(
                                     (from rg in _context.ResourceGroups
                                      where rg.ResourceGroupId == resourceGroupId
                                      select rg).FirstOrDefault());
+                            case "resourceGroupName":
+                                return Ok(
+                                    (from rg in _context.ResourceGroups
+                                     where rg.ResourceGroupName == resourceGroupName
+                                     select rg).ToList());
                             default:
                                 return BadRequest("Incorrect parameters entered");
                         }
