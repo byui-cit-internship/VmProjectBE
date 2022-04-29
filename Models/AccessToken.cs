@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("access_token", Schema = "DatabaseVmProject")]
+    [Table("access_token", Schema = "VmProjectBE")]
     public class AccessToken
     {
         [Key]

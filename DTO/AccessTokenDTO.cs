@@ -1,4 +1,4 @@
-﻿namespace DatabaseVmProject.DTO
+﻿namespace VmProjectBE.DTO
 {
     public class AccessTokenDTO
     {

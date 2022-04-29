@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("tag_category", Schema = "DatabaseVmProject")]
+    [Table("tag_category", Schema = "VmProjectBE")]
     public class TagCategory
     {
         [Key]

@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("vm_instance", Schema = "DatabaseVmProject")]
+    [Table("vm_instance", Schema = "VmProjectBE")]
     public class VmInstance
     {
         [Key]

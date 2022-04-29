@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("role", Schema = "DatabaseVmProject")]
+    [Table("role", Schema = "VmProjectBE")]
     public class Role
     {
         [Key]

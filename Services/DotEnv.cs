@@ -1,4 +1,4 @@
-﻿namespace DatabaseVmProject.Services
+﻿namespace VmProjectBE.Services
 {
     // Blatently stolen from https://dusted.codes/dotenv-in-dotnet
     public static class DotEnv

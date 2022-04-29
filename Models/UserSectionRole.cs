@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("user_section_role", Schema = "DatabaseVmProject")]
+    [Table("user_section_role", Schema = "VmProjectBE")]
     public class UserSectionRole
     {
         [Key]

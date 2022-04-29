@@ -1,4 +1,4 @@
-﻿namespace DatabaseVmProject.DTO.v1
+﻿namespace VmProjectBE.DTO.v1
 {
     public class CreateVmDTO
     {

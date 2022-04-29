@@ -8,7 +8,7 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "cookie",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     cookie_id = table.Column<int>(type: "int", nullable: false)
@@ -24,7 +24,7 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_cookie_session_token_session_token_id",
                         column: x => x.session_token_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "session_token",
                         principalColumn: "session_token_id",
                         onDelete: ReferentialAction.Restrict);
@@ -32,7 +32,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_cookie_session_token_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "cookie",
                 column: "session_token_id");
         }
@@ -41,7 +41,7 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "cookie",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
         }
     }
 }

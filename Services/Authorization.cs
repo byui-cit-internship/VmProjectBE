@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseVmProject.DAL;
-using DatabaseVmProject.Models;
+using VmProjectBE.DAL;
+using VmProjectBE.Models;
 
-namespace DatabaseVmProject.Services
+namespace VmProjectBE.Services
 {
     public class Authorization
     {

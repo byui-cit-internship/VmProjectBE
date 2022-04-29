@@ -8,43 +8,43 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_course_resource_group_template_resource_group_template_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_folder_user_user_UserId",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user");
 
             migrationBuilder.DropTable(
                 name: "resource_group_template",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropIndex(
                 name: "IX_folder_user_UserId",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user");
 
             migrationBuilder.DropColumn(
                 name: "UserId",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user");
 
             migrationBuilder.RenameColumn(
                 name: "resource_group_template_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course",
                 newName: "resource_group_id");
 
             migrationBuilder.RenameIndex(
                 name: "IX_course_resource_group_template_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course",
                 newName: "IX_course_resource_group_id");
 
             migrationBuilder.AddColumn<string>(
                 name: "resource_group_name",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "resource_group",
                 type: "varchar(20)",
                 nullable: false,
@@ -52,33 +52,33 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "resource_group_vsphere_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "resource_group",
                 type: "varchar(15)",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_folder_user_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user",
                 column: "user_id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_course_resource_group_resource_group_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course",
                 column: "resource_group_id",
-                principalSchema: "DatabaseVmProject",
+                principalSchema: "VmProjectBE",
                 principalTable: "resource_group",
                 principalColumn: "resource_group_id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_folder_user_user_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user",
                 column: "user_id",
-                principalSchema: "DatabaseVmProject",
+                principalSchema: "VmProjectBE",
                 principalTable: "user",
                 principalColumn: "user_id",
                 onDelete: ReferentialAction.Restrict);
@@ -88,51 +88,51 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_course_resource_group_resource_group_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_folder_user_user_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user");
 
             migrationBuilder.DropIndex(
                 name: "IX_folder_user_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user");
 
             migrationBuilder.DropColumn(
                 name: "resource_group_name",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "resource_group");
 
             migrationBuilder.DropColumn(
                 name: "resource_group_vsphere_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "resource_group");
 
             migrationBuilder.RenameColumn(
                 name: "resource_group_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course",
                 newName: "resource_group_template_id");
 
             migrationBuilder.RenameIndex(
                 name: "IX_course_resource_group_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course",
                 newName: "IX_course_resource_group_template_id");
 
             migrationBuilder.AddColumn<int>(
                 name: "UserId",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user",
                 type: "int",
                 nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "resource_group_template",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     resource_group_template_id = table.Column<int>(type: "int", nullable: false)
@@ -147,26 +147,26 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_folder_user_UserId",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user",
                 column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_course_resource_group_template_resource_group_template_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "course",
                 column: "resource_group_template_id",
-                principalSchema: "DatabaseVmProject",
+                principalSchema: "VmProjectBE",
                 principalTable: "resource_group_template",
                 principalColumn: "resource_group_template_id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_folder_user_user_UserId",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "folder_user",
                 column: "UserId",
-                principalSchema: "DatabaseVmProject",
+                principalSchema: "VmProjectBE",
                 principalTable: "user",
                 principalColumn: "user_id",
                 onDelete: ReferentialAction.Restrict);

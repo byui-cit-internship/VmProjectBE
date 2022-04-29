@@ -1,6 +1,6 @@
-﻿using DatabaseVmProject.Models;
+﻿using VmProjectBE.Models;
 
-namespace DatabaseVmProject.DTO
+namespace VmProjectBE.DTO
 {
     public class UserSession
     {

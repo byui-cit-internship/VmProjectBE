@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("vm_instance_vswitch", Schema = "DatabaseVmProject")]
+    [Table("vm_instance_vswitch", Schema = "VmProjectBE")]
     public class VmInstanceVswitch
     {
         [Key]

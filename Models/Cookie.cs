@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("cookie", Schema = "DatabaseVmProject")]
+    [Table("cookie", Schema = "VmProjectBE")]
     public class Cookie
     {
         // Primary Key

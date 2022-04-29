@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("folder", Schema = "DatabaseVmProject")]
+    [Table("folder", Schema = "VmProjectBE")]
     public class Folder
     {
         // Primary Key

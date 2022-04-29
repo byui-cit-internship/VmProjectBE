@@ -8,7 +8,7 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.RenameColumn(
                 name: "tag)_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "tag_user",
                 newName: "tag_user_id");
         }
@@ -17,7 +17,7 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.RenameColumn(
                 name: "tag_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "tag_user",
                 newName: "tag)_user_id");
         }

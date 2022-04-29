@@ -8,11 +8,11 @@ namespace Database_VmProject.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "DatabaseVmProject");
+                name: "VmProjectBE");
 
             migrationBuilder.CreateTable(
                 name: "course",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     course_id = table.Column<int>(type: "int", nullable: false)
@@ -27,7 +27,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ip_address",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     ip_address_id = table.Column<int>(type: "int", nullable: false)
@@ -43,7 +43,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "role",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     role_id = table.Column<int>(type: "int", nullable: false)
@@ -58,7 +58,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "semester",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     semester_id = table.Column<int>(type: "int", nullable: false)
@@ -75,7 +75,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "tag_category",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     tag_category_id = table.Column<int>(type: "int", nullable: false)
@@ -91,7 +91,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "user",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     user_id = table.Column<int>(type: "int", nullable: false)
@@ -109,7 +109,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vlan",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vlan_id = table.Column<int>(type: "int", nullable: false)
@@ -124,7 +124,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vm_template",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vm_template_id = table.Column<int>(type: "int", nullable: false)
@@ -140,7 +140,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vswitch",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vswitch_id = table.Column<int>(type: "int", nullable: false)
@@ -155,7 +155,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "section",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     section_id = table.Column<int>(type: "int", nullable: false)
@@ -171,14 +171,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_section_course_course_id",
                         column: x => x.course_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "course",
                         principalColumn: "course_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_section_semester_semester_id",
                         column: x => x.semester_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "semester",
                         principalColumn: "semester_id",
                         onDelete: ReferentialAction.Cascade);
@@ -186,7 +186,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "tag",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     tag_id = table.Column<int>(type: "int", nullable: false)
@@ -202,7 +202,7 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_tag_tag_category_tag_category_id",
                         column: x => x.tag_category_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "tag_category",
                         principalColumn: "tag_category_id",
                         onDelete: ReferentialAction.Cascade);
@@ -210,7 +210,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "access_token",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     access_token_id = table.Column<int>(type: "int", nullable: false)
@@ -225,7 +225,7 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_access_token_user_user_id",
                         column: x => x.user_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "user",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
@@ -233,7 +233,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vm_instance",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vm_instance_id = table.Column<int>(type: "int", nullable: false)
@@ -248,7 +248,7 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vm_instance_vm_template_vm_template_id",
                         column: x => x.vm_template_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vm_template",
                         principalColumn: "vm_template_id",
                         onDelete: ReferentialAction.Cascade);
@@ -256,7 +256,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vlan_vswitch",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vlan_vswitch_id = table.Column<int>(type: "int", nullable: false)
@@ -270,14 +270,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vlan_vswitch_vlan_vlan_id",
                         column: x => x.vlan_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vlan",
                         principalColumn: "vlan_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vlan_vswitch_vswitch_vswitch_id",
                         column: x => x.vswitch_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vswitch",
                         principalColumn: "vswitch_id",
                         onDelete: ReferentialAction.Cascade);
@@ -285,7 +285,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "group",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     group_id = table.Column<int>(type: "int", nullable: false)
@@ -300,7 +300,7 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_group_section_section_id",
                         column: x => x.section_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "section",
                         principalColumn: "section_id",
                         onDelete: ReferentialAction.Cascade);
@@ -308,7 +308,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "user_section_role",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     user_section_role_id = table.Column<int>(type: "int", nullable: false)
@@ -323,21 +323,21 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_user_section_role_role_role_id",
                         column: x => x.role_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "role",
                         principalColumn: "role_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_user_section_role_section_section_id",
                         column: x => x.section_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "section",
                         principalColumn: "section_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_user_section_role_user_user_id",
                         column: x => x.user_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "user",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
@@ -345,7 +345,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "tag_user",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     tag_user_id = table.Column<int>(name: "tag)_user_id", type: "int", nullable: false)
@@ -359,14 +359,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_tag_user_tag_tag_id",
                         column: x => x.tag_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "tag",
                         principalColumn: "tag_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_tag_user_user_user_id",
                         column: x => x.user_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "user",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
@@ -374,7 +374,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vm_template_tag",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vm_template_tag_id = table.Column<int>(type: "int", nullable: false)
@@ -388,14 +388,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vm_template_tag_tag_tag_id",
                         column: x => x.tag_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "tag",
                         principalColumn: "tag_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vm_template_tag_vm_template_vm_template_id",
                         column: x => x.vm_template_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vm_template",
                         principalColumn: "vm_template_id",
                         onDelete: ReferentialAction.Cascade);
@@ -403,7 +403,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vswitch_tag",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vswitch_tag_id = table.Column<int>(type: "int", nullable: false)
@@ -417,14 +417,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vswitch_tag_tag_tag_id",
                         column: x => x.tag_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "tag",
                         principalColumn: "tag_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vswitch_tag_vswitch_vswitch_id",
                         column: x => x.vswitch_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vswitch",
                         principalColumn: "vswitch_id",
                         onDelete: ReferentialAction.Cascade);
@@ -432,7 +432,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "session_token",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     session_token_id = table.Column<int>(type: "int", nullable: false)
@@ -447,7 +447,7 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_session_token_access_token_access_token_id",
                         column: x => x.access_token_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "access_token",
                         principalColumn: "access_token_id",
                         onDelete: ReferentialAction.Cascade);
@@ -455,7 +455,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vm_instance_ip_address",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vm_instance_ip_address_id = table.Column<int>(type: "int", nullable: false)
@@ -469,14 +469,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vm_instance_ip_address_ip_address_ip_address_id",
                         column: x => x.ip_address_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "ip_address",
                         principalColumn: "ip_address_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vm_instance_ip_address_vm_instance_vm_instance_id",
                         column: x => x.vm_instance_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vm_instance",
                         principalColumn: "vm_instance_id",
                         onDelete: ReferentialAction.Cascade);
@@ -484,7 +484,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vm_instance_tag",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vm_instance_tag_id = table.Column<int>(type: "int", nullable: false)
@@ -498,14 +498,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vm_instance_tag_tag_tag_id",
                         column: x => x.tag_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "tag",
                         principalColumn: "tag_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vm_instance_tag_vm_instance_vm_instance_id",
                         column: x => x.vm_instance_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vm_instance",
                         principalColumn: "vm_instance_id",
                         onDelete: ReferentialAction.Cascade);
@@ -513,7 +513,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "vm_instance_vswitch",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     vm_instance_vswitch_id = table.Column<int>(type: "int", nullable: false)
@@ -527,14 +527,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_vm_instance_vswitch_vm_instance_vm_instance_id",
                         column: x => x.vm_instance_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vm_instance",
                         principalColumn: "vm_instance_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vm_instance_vswitch_vswitch_vswitch_id",
                         column: x => x.vswitch_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "vswitch",
                         principalColumn: "vswitch_id",
                         onDelete: ReferentialAction.Cascade);
@@ -542,7 +542,7 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateTable(
                 name: "group_membership",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 columns: table => new
                 {
                     group_membership_id = table.Column<int>(type: "int", nullable: false)
@@ -556,14 +556,14 @@ namespace Database_VmProject.Migrations
                     table.ForeignKey(
                         name: "FK_group_membership_group_group_id",
                         column: x => x.group_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "group",
                         principalColumn: "group_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_group_membership_user_user_id",
                         column: x => x.user_id,
-                        principalSchema: "DatabaseVmProject",
+                        principalSchema: "VmProjectBE",
                         principalTable: "user",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
@@ -571,157 +571,157 @@ namespace Database_VmProject.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_access_token_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "access_token",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_group_section_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "group",
                 column: "section_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_group_membership_group_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "group_membership",
                 column: "group_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_group_membership_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "group_membership",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_section_course_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "section",
                 column: "course_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_section_semester_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "section",
                 column: "semester_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_session_token_access_token_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "session_token",
                 column: "access_token_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tag_tag_category_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "tag",
                 column: "tag_category_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tag_user_tag_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "tag_user",
                 column: "tag_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tag_user_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "tag_user",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_section_role_role_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "user_section_role",
                 column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_section_role_section_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "user_section_role",
                 column: "section_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_section_role_user_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "user_section_role",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vlan_vswitch_vlan_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vlan_vswitch",
                 column: "vlan_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vlan_vswitch_vswitch_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vlan_vswitch",
                 column: "vswitch_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_vm_template_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance",
                 column: "vm_template_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_ip_address_ip_address_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance_ip_address",
                 column: "ip_address_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_ip_address_vm_instance_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance_ip_address",
                 column: "vm_instance_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_tag_tag_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance_tag",
                 column: "tag_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_tag_vm_instance_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance_tag",
                 column: "vm_instance_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_vswitch_vm_instance_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance_vswitch",
                 column: "vm_instance_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_instance_vswitch_vswitch_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_instance_vswitch",
                 column: "vswitch_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_template_tag_tag_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_template_tag",
                 column: "tag_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vm_template_tag_vm_template_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vm_template_tag",
                 column: "vm_template_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vswitch_tag_tag_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vswitch_tag",
                 column: "tag_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vswitch_tag_vswitch_id",
-                schema: "DatabaseVmProject",
+                schema: "VmProjectBE",
                 table: "vswitch_tag",
                 column: "vswitch_id");
         }
@@ -730,99 +730,99 @@ namespace Database_VmProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "group_membership",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "session_token",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "tag_user",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "user_section_role",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vlan_vswitch",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vm_instance_ip_address",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vm_instance_tag",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vm_instance_vswitch",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vm_template_tag",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vswitch_tag",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "group",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "access_token",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "role",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vlan",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "ip_address",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vm_instance",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "tag",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vswitch",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "section",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "user",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "vm_template",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "tag_category",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "course",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
 
             migrationBuilder.DropTable(
                 name: "semester",
-                schema: "DatabaseVmProject");
+                schema: "VmProjectBE");
         }
     }
 }

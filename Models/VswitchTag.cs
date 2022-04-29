@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("vswitch_tag", Schema = "DatabaseVmProject")]
+    [Table("vswitch_tag", Schema = "VmProjectBE")]
     public class VswitchTag
     {
         [Key]

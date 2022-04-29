@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using DatabaseVmProject.Models;
+using VmProjectBE.Models;
 
 
 
-namespace DatabaseVmProject.DAL
+namespace VmProjectBE.DAL
 {
     public class VmEntities : DbContext
     {

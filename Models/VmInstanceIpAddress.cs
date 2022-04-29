@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("vm_instance_ip_address", Schema = "DatabaseVmProject")]
+    [Table("vm_instance_ip_address", Schema = "VmProjectBE")]
     public class VmInstanceIpAddress
     {
         [Key]

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using DatabaseVmProject.DAL;
+using VmProjectBE.DAL;
 
-namespace DatabaseVmProject
+namespace VmProjectBE
 {
     public class Program
     {

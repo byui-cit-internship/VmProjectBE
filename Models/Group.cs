@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("group", Schema = "DatabaseVmProject")]
+    [Table("group", Schema = "VmProjectBE")]
     public class Group
     {
         [Key]

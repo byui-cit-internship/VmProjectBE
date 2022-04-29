@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DatabaseVmProject.Models
+namespace VmProjectBE.Models
 {
-    [Table("vm_template_tag", Schema = "DatabaseVmProject")]
+    [Table("vm_template_tag", Schema = "VmProjectBE")]
     public class VmTemplateTag
     {
         [Key]

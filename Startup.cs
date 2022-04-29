@@ -1,11 +1,11 @@
-﻿using DatabaseVmProject.DAL;
-using DatabaseVmProject.Handlers;
+﻿using VmProjectBE.DAL;
+using VmProjectBE.Handlers;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using DatabaseVmProject.Services;
+using VmProjectBE.Services;
 
-namespace DatabaseVmProject
+namespace VmProjectBE
 {
     public class Startup
     {

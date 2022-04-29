@@ -1,9 +1,9 @@
-﻿using DatabaseVmProject.DAL;
+﻿using VmProjectBE.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DatabaseVmProject.Services;
+using VmProjectBE.Services;
 
-namespace DatabaseVmProject.Controllers.v1
+namespace VmProjectBE.Controllers.v1
 {
     [Authorize]
     [Route("api/v2/[controller]")]

@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using DatabaseVmProject.DAL;
-using DatabaseVmProject.Models;
-using DatabaseVmProject.DTO;
+using VmProjectBE.DAL;
+using VmProjectBE.Models;
+using VmProjectBE.DTO;
 
-namespace DatabaseVmProject.Controllers
+namespace VmProjectBE.Controllers
 {
     [Authorize]
     [Route("api/v1/[controller]")]

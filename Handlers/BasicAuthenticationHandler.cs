@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using DatabaseVmProject.DAL;
-using DatabaseVmProject.Models;
-using DatabaseVmProject.DTO;
+using VmProjectBE.DAL;
+using VmProjectBE.Models;
+using VmProjectBE.DTO;
 
-namespace DatabaseVmProject.Handlers
+namespace VmProjectBE.Handlers
 {
     public class AppAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
