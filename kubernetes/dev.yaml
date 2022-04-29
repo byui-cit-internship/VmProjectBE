@@ -1,20 +1,20 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vmproject-be-api-dev
+  name: vm-project-be-dev
   namespace: vm-project-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vmproject-be-api-dev
+      app: vm-project-be-dev
   template:
     metadata:
       labels:
-        app: vmproject-be-api-dev
+        app: vm-project-be-dev
     spec:
       containers:
-      - name: vmproject-be-api-dev
+      - name: vm-project-be-dev
         env:
         - name: APSNETCORE_ENVIRONMENT
           value: Development
@@ -48,7 +48,7 @@ spec:
             secretKeyRef:
               name: be-env
               key: BFF_PASSWORD
-        image: rcr.citwdd.net/database-repository/database-vima:latest
+        image: rcr.citwdd.net/be-repository/be-vima:latest
         ports:
         - containerPort: 80        
         resources:
@@ -65,16 +65,16 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 10
       imagePullSecrets:
-      - name: database-rcr-secret           
+      - name: be-rcr-secret           
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vmproject-be-api-dev
+  name: vm-project-be-dev-loadbalancer
   namespace: vm-project-dev
 spec:
   selector:
-    app: vmproject-be-api-dev
+    app: vm-project-be-dev
   type: LoadBalancer
   ports:
   - port: 80
@@ -83,11 +83,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vmproject-be-api-dev-nodeport
+  name: vm-project-be-dev-nodeport
   namespace: vm-project-dev
 spec:
   selector:
-    app: vmproject-be-api-dev
+    app: vm-project-be-dev
   type: NodePort
   ports:
     - port: 80
@@ -96,7 +96,7 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: vmproject-be-dev-ingress
+  name: vm-project-be-dev-ingress
   namespace: vm-project-dev
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -105,13 +105,13 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rancher-dev-be-api.citwdd.net
-    secretName: dev-vm-be-api-tls
+    - rancher-dev-be.citwdd.net
+    secretName: vm-project-be-dev-tls
   rules:
-  - host: rancher-dev-be-api.citwdd.net
+  - host: rancher-dev-be.citwdd.net
     http:
       paths:
       - backend:
-          serviceName: vmproject-be-api-dev-nodeport
+          serviceName: vm-project-be-dev-nodeport
           servicePort: 80
             
