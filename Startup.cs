@@ -84,7 +84,12 @@ namespace VmProjectBE
             string dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
             string dbPassword = System.Environment.GetEnvironmentVariable("DB_PASSWORD");
 
-            string connectionString = $"Server={dbServer},{dbPort};Database={dbDatabase};User Id={dbUser}; Password={dbPassword};";
+            String connectionString="";
+            if (dbServer==null){
+                connectionString = Configuration.GetConnectionString("DatabaseString");
+            } else{
+                connectionString = $"Server={dbServer},{dbPort};Database={dbDatabase};User Id={dbUser}; Password={dbPassword};";
+            }
 
             services.AddDbContext<VmEntities>(opt =>
                 opt.UseSqlServer(connectionString)
