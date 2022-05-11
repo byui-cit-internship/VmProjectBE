@@ -43,7 +43,7 @@ namespace VmProjectBE
                 options.Cookie.Name = ".VMProject.Session";
                 options.Cookie.HttpOnly = false;
                 options.Cookie.IsEssential = true;
-                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 options.IdleTimeout = TimeSpan.FromDays(5);
             });
@@ -77,8 +77,8 @@ namespace VmProjectBE
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("BasicAuthentication", null);
 
             DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
-
-            string dbServer = System.Environment.GetEnvironmentVariable("DB_SERVER");
+            string dbServer = null;
+            //string dbServer = System.Environment.GetEnvironmentVariable("DB_SERVER");
             string dbPort = System.Environment.GetEnvironmentVariable("DB_PORT");
             string dbDatabase = System.Environment.GetEnvironmentVariable("DB_DATABASE");
             string dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
