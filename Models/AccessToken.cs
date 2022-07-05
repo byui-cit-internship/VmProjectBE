@@ -13,7 +13,7 @@ namespace VmProjectBE.Models
         public int AccessTokenId { get; set; }
 
         [Required]
-        [Column("access_token_value", TypeName = "varchar(200)", Order = 2)]
+        [Column("access_token_value", TypeName = "varchar(2000)", Order = 2)]
         public string AccessTokenValue { get; set; }
 
         [Required]
