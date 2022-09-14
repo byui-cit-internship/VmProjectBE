@@ -37,7 +37,88 @@ namespace VmProjectBE.Controllers.v2
         /****************************************
 
         ****************************************/
+        /** 
+         * <summary>
+         * Gets a user's info. 
+         * </summary>
+         * <param name="userId">Primary key of a user.</param>
+         * <param name="firstName">First name of the user being requested.</param>
+         * <param name="lastName">Last name of the user being requested.</param>
+         * <param name="email">Email of the user being requested.</param>
+         * <param name="isAdmin">Whether the user is an administrator or not.</param>
+         * <param name="canvasToken">Specified when the user is a professor.</param>
+         * <returns>A "User" object(s)</returns>
+         * <remarks>
+         * Only certain parameter combinations are allowed. Possible combinations include:<br/>
+         * <![CDATA[
+         *      <pre>
+         *          <code>/user
+         *                /user?userId={userId}
+         *                /user?email={email}
+         *                /user?canvasToken={canvasToken}
+         *          </code>
+         *      </pre>
+         * ]]>
+         * Sample requests:
+         *
+         *      Returns all users.
+         *      GET /user
+         *      RETURNS
+         *      {
+         *          [
+         *              {
+         *                  "userId": 1,
+         *                  "firstName": "Michael",
+         *                  "lastName": "Ebenal",
+         *                  "email": "ebe17003@byui.edu",
+         *                  "is_admin": true,
+         *                  "canvas_token": null
+         *              },
+         *              {
+         *                  "userId": 2,
+         *                  "firstName": "Jaren",
+         *                  "lastName": "Brownlee",
+         *                  "email": "bro14001@byui.edu",
+         *                  "isAdmin: false,
+         *                  "canvasToken": null
+         *              },
+         *              ...
+         *          ]
+         *      }
+         *
+         *      Returns user with specified ID. Note: Not student/faculty ID but database primary key.
+         *      GET /user?userId=1
+         *      RETURNS
+         *      {
+         *          "userId": 1,
+         *          "firstName": "Michael",
+         *          "lastName": "Ebenal",
+         *          "email" : "ebe17003@byui.edu",
+         *          "is_admin" : "true",
+         *          "canvas_token" : "null"
+         *      }
+         * 
+         *      Returns user with specified email.
+         *      GET /user?email=ebe17003%40byui.edu
+         *      RETURNS
+         *      {
+         *          "userId": 1,
+         *          "firstName": "Michael",
+         *          "lastName": "Ebenal",
+         *          "email" : "ebe17003@byui.edu",
+         *          "is_admin" : "true",
+         *          "canvas_token" : "null"
+         *      }
+         *
+         * </remarks>
+         * <response code="200">Returns a user object(s)</response>
+         * <response code="400">Incorrect parameters/combination entered</response>
+         * <response code="403">Insufficent permissions to make request</response>
+         */
         [HttpGet("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> GetUser(
             [FromQuery] int? userId,
             [FromQuery] string firstName,
@@ -96,14 +177,69 @@ namespace VmProjectBE.Controllers.v2
             }
             else
             {
-                return NotFound("Only the BFF application has access to this resource.");
+                return Forbid("Only authorized users can access data about users");
             }
         }
 
         /****************************************
 
         ****************************************/
+        /** 
+         * <summary>
+         * Creates a new user 
+         * </summary>
+         * <returns>The created "User" object</returns>
+         * <remarks>
+         * Sample requests:
+         *
+         *      Creates a single user.
+         *      POST /user
+         *      BODY
+         *      {
+         *          "firstName": "Michael",
+         *          "lastName": "Ebenal",
+         *          "email": "ebe17003@byui.edu"
+         *          "is_admin": true
+         *      }
+         *      RETURNS
+         *      {
+         *          "userId": 1,
+         *          "firstName": "Michael",
+         *          "lastName": "Ebenal",
+         *          "email": "ebe17003@byui.edu",
+         *          "is_admin": true,
+         *          "canvas_token": null
+         *      }
+         *      
+         *      POST /user
+         *      BODY
+         *      {
+         *          "firstName": "Michael",
+         *          "lastName": "Ebenal",
+         *          "email": "ebe17003@byui.edu"
+         *          "is_admin": true,
+         *          "canvas_token": "asjhdgjhgsjdfhgjagsdjkhgkjgakjfg"
+         *      }
+         *      RETURNS
+         *      {
+         *          "userId": 1,
+         *          "firstName": "Michael",
+         *          "lastName": "Ebenal",
+         *          "email": "ebe17003@byui.edu",
+         *          "is_admin": true,
+         *          "canvas_token": "asjhdgjhgsjdfhgjagsdjkhgkjgakjfg"
+         *      }
+         *
+         *      
+         * </remarks>
+         * <response code="200">Returns a created user object</response>
+         * <response code="400">General error message, likely an incorrect body or database availability problem</response>
+         * <response code="403">Insufficent permissions to make request</response>
+         */
         [HttpPost("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> PostUser([FromBody] User user)
         {
             // Gets email from session
@@ -130,7 +266,7 @@ namespace VmProjectBE.Controllers.v2
             }
             else
             {
-                return NotFound("Only the BFF application has access to this resource.");
+                return Forbid("Only the BFF application has access to this resource.");
             }
         }
 

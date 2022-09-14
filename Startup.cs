@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using VmProjectBE.Services;
+using System.Reflection;
 
 namespace VmProjectBE
 {
@@ -32,7 +33,12 @@ namespace VmProjectBE
                opts => opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
            );
 
-            services.AddSwaggerGen();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen(options =>
+            {
+                string xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
             // This is needed to register my Background service
             // UNCOMMENT LATER services.AddHostedService<BackgroundService1>();
             // Allow to use client Factory
