@@ -90,10 +90,13 @@ namespace VmProjectBE
             string dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
             string dbPassword = System.Environment.GetEnvironmentVariable("DB_PASSWORD");
 
-            String connectionString="";
-            if (dbServer==null){
+            String connectionString = "";
+            if (dbServer == null)
+            {
                 connectionString = Configuration.GetConnectionString("DatabaseString");
-            } else{
+            }
+            else
+            {
                 connectionString = $"Server={dbServer},{dbPort};Database={dbDatabase};User Id={dbUser}; Password={dbPassword};";
             }
 

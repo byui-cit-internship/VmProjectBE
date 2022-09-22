@@ -58,7 +58,8 @@ namespace VmProjectBE.Controllers
                 }
 
                 HttpClient httpClient = _httpClientFactory.CreateClient();
-                HttpResponseMessage response = await httpClient.GetAsync($"https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={accessTokenObj.AccessTokenValue}");
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, $"Bearer {accessTokenObj.AccessTokenValue}");
+                HttpResponseMessage response = await httpClient.GetAsync($"https://www.googleapis.com/userinfo/v2/me");
 
                 if (response.IsSuccessStatusCode)
                 {
