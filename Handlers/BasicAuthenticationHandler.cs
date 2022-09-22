@@ -35,9 +35,9 @@ namespace VmProjectBE.Handlers
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             string sessionTokenValue = _httpContextAccessor.HttpContext.Session.GetString("sessionTokenValue");
+            string token = _httpContextAccessor.HttpContext.Session.GetString("tokenId");
 
-
-            if (sessionTokenValue == Environment.GetEnvironmentVariable("BFF_PASSWORD"))
+            if (token == Environment.GetEnvironmentVariable("BFF_PASSWORD"))
             {
                 return SuccessResult("BFF_APPLICATION");
             }

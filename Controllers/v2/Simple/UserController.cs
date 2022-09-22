@@ -129,11 +129,13 @@ namespace VmProjectBE.Controllers.v2
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
-            int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            User professor = null;
 
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(accessUserId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(accessUserId);
+            }
 
             if (isSystem || professor != null)
             {
@@ -244,12 +246,13 @@ namespace VmProjectBE.Controllers.v2
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            User professor = null;
 
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(userId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(accessUserId);
+            }
 
             if (isSystem || professor != null)
             {
@@ -278,12 +281,13 @@ namespace VmProjectBE.Controllers.v2
         {
             // Gets email from session
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            User professor = null;
 
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(userId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(accessUserId);
+            }
 
             if (isSystem || professor != null)
             {
