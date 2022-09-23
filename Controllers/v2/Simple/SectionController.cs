@@ -12,15 +12,21 @@ namespace VmProjectBE.Controllers.v2
     [ApiController]
     public class SectionController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly VmEntities _context;
         private readonly ILogger<SectionController> _logger;
         private readonly Authorization _auth;
         private readonly IWebHostEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SectionController(VmEntities context, ILogger<SectionController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
+        public SectionController(
+            IConfiguration configuration,
+            VmEntities context, 
+            ILogger<SectionController> logger, 
+            IHttpContextAccessor httpContextAccessor, 
+            IWebHostEnvironment env)
         {
-
+            _configuration = configuration;
             _context = context;
             _logger = logger;
             _auth = new(_context, _logger);
@@ -43,7 +49,10 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? userId)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
             User professor = null;
 
             if (!isSystem)
@@ -143,7 +152,10 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> PostSection([FromBody] Section section)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
             User professor = null;
 
             if (!isSystem)
