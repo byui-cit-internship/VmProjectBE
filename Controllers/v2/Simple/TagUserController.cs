@@ -13,6 +13,7 @@ namespace VmProjectBE.Controllers.v2
     [ApiController]
     public class TagUserController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly VmEntities _context;
         private readonly ILogger<TagUserController> _logger;
         private readonly Authorization _auth;
@@ -20,12 +21,13 @@ namespace VmProjectBE.Controllers.v2
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public TagUserController(
+            IConfiguration configuration,
             VmEntities context,
             ILogger<TagUserController> logger,
             IHttpContextAccessor httpContextAccessor,
             IWebHostEnvironment env)
         {
-
+            _configuration = configuration;
             _context = context;
             _logger = logger;
             _auth = new(_context, _logger);
@@ -43,13 +45,17 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? userId)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            User professor = null;
 
-            int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(accessUserId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(accessUserId);
+            }
 
             if (isSystem || professor != null)
             {
@@ -115,13 +121,17 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> PostTagUser([FromBody] TagUser tagUser)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            User professor = null;
 
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(userId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(userId);
+            }
 
             if (isSystem || professor != null)
             {

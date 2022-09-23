@@ -13,6 +13,7 @@ namespace VmProjectBE.Controllers.v2
     [ApiController]
     public class TagController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly VmEntities _context;
         private readonly ILogger<TagController> _logger;
         private readonly Authorization _auth;
@@ -20,12 +21,13 @@ namespace VmProjectBE.Controllers.v2
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public TagController(
+            IConfiguration configuration,
             VmEntities context,
             ILogger<TagController> logger,
             IHttpContextAccessor httpContextAccessor,
             IWebHostEnvironment env)
         {
-
+            _configuration = configuration;
             _context = context;
             _logger = logger;
             _auth = new(_context, _logger);
@@ -45,13 +47,17 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] string tagDescription)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            User professor = null;
 
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(userId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(userId);
+            }
 
             if (isSystem || professor != null)
             {
@@ -85,7 +91,7 @@ namespace VmProjectBE.Controllers.v2
                                     (from t in _context.Tags
                                      where t.TagVcenterId == tagVcenterId
                                      select t).FirstOrDefault());
-                            case "tagNAme":
+                            case "tagName":
                                 return Ok(
                                     (from t in _context.Tags
                                      where t.TagName == tagName
@@ -124,13 +130,17 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> PostTag([FromBody] Tag tag)
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            User professor = null;
 
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-
-            // Returns a professor user or null if email is not associated with a professor
-            User professor = _auth.getAdmin(userId);
-            // Returns a professor user or null if email is not associated with a professor
+            if (!isSystem)
+            {
+                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(userId);
+            }
 
             if (isSystem || professor != null)
             {
