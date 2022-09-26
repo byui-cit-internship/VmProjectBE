@@ -38,7 +38,7 @@ namespace VmProjectBE.Controllers.v2
         /****************************************
 
         ****************************************/
-        [HttpGet("")]
+        [HttpGet("getCourse")]
         public async Task<ActionResult> GetCourse(
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,

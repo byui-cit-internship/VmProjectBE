@@ -37,7 +37,7 @@ namespace VmProjectBE.Controllers.v2
         /****************************************
 
         ****************************************/
-        [HttpGet("")]
+        [HttpGet("sectionList")]
         public async Task<ActionResult> GetSection(
             [FromQuery] int? sectionId,
             [FromQuery] int? courseId,
