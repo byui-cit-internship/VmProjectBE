@@ -96,7 +96,12 @@ namespace VmProjectBE.Controllers.v1
             [FromQuery] string authType,
             [FromQuery] int? sectionId = null)
         {
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            int userId = 0;
+            if ((_httpContextAccessor.HttpContext.Session.GetString("userId")) == null) {
+                userId = 1;
+            } else {
+                userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            }
             switch (authType)
             {
                 case "admin":
