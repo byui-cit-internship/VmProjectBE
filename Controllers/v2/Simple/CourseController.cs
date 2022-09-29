@@ -50,6 +50,7 @@ namespace VmProjectBE.Controllers.v2
                                          ? _configuration.GetConnectionString("BFF_PASSWORD")
                                          : Environment.GetEnvironmentVariable("BFF_PASSWORD");
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            string session_token = _httpContextAccessor.HttpContext.Session.GetString("tokenId");
             User professor = null;
 
             if (!isSystem)

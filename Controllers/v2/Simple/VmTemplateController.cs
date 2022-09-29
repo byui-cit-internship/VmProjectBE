@@ -50,15 +50,16 @@ namespace VmProjectBE.Controllers.v2
                                          ? _configuration.GetConnectionString("BFF_PASSWORD")
                                          : Environment.GetEnvironmentVariable("BFF_PASSWORD");
             bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
-            User professor = null;
+            string session_token = _httpContextAccessor.HttpContext.Session.GetString("tokenId"); // session_token coming as null...
+            User user = null;
 
             if (!isSystem)
             {
                 int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-                professor = _auth.getAdmin(userId);
+                user = _auth.getUser(userId);
             }
 
-            if (isSystem || professor != null)
+            if (isSystem || user != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("vmTemplateId", vmTemplateId),
