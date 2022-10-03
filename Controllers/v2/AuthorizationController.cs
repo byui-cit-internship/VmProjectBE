@@ -8,25 +8,20 @@ namespace VmProjectBE.Controllers.v1
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class AuthorizationController : ControllerBase
+    public class AuthorizationController : BeController
     {
-        private readonly VmEntities _context;
-        private readonly ILogger<AuthorizationController> _logger;
-        private readonly Authorization _auth;
-        private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthorizationController(
-            VmEntities context, 
+            IConfiguration configuration,
             ILogger<AuthorizationController> logger,
             IHttpContextAccessor httpContextAccessor,
-            IWebHostEnvironment env)
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-            _context = context;
-            _logger = logger;
-            _auth = new(_context, _logger);
-            _httpContextAccessor = httpContextAccessor;
-            _env = env;
         }
 
         /****************************************
@@ -96,15 +91,14 @@ namespace VmProjectBE.Controllers.v1
             [FromQuery] string authType,
             [FromQuery] int? sectionId = null)
         {
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
             switch (authType)
             {
                 case "admin":
-                    return Ok(_auth.getAdmin(userId));
+                    return Ok(_auth.GetAdmin());
                 case "professor" when sectionId != null:
-                    return Ok(_auth.getProfessor(userId, (int)sectionId));
+                    return Ok(_auth.GetProfessor((int)sectionId));
                 case "user":
-                    return Ok(_auth.getUser(userId));
+                    return Ok(_auth.GetUser());
                 default:
                     return BadRequest("AuthType is required and must be either user, professor, or admin. If 'professor' is used, a sectionID must also be present.");
             }

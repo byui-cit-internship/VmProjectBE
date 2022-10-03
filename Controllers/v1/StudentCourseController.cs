@@ -10,25 +10,20 @@ namespace VmProjectBE.Controllers.v1
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class StudentCourseController : ControllerBase
+    public class StudentCourseController : BeController
     {
-        private readonly VmEntities _context;
-        private readonly ILogger<StudentCourseController> _logger;
-        private readonly Authorization _auth;
-        private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public StudentCourseController(
-            VmEntities context, 
+            IConfiguration configuration,
             ILogger<StudentCourseController> logger,
             IHttpContextAccessor httpContextAccessor,
-            IWebHostEnvironment env)
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-            _context = context;
-            _logger = logger;
-            _auth = new(_context, _logger);
-            _httpContextAccessor = httpContextAccessor;
-            _env = env;
         }
 
         /****************************************
@@ -37,13 +32,12 @@ namespace VmProjectBE.Controllers.v1
         [HttpGet("")]
         public async Task<ActionResult> GetCourseListByUserId([FromQuery] int queryUserId)
         {
-            // Gets email from session
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
 
-            // Returns a professor user or null if email is not associated with a professor
-            User user = _auth.getUser(userId);
+            User user = _auth.GetUser();
 
-            if (user != null)
+            if (isSystem || user != null)
             {
                 // Returns a list of course name, section id, semester, section number, and professor
                 // based on the professor and semester variables

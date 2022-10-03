@@ -10,9 +10,17 @@ namespace VmProjectBE
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
+
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables("CONSTR");
+
+            Configuration = builder.Build();
             Environment = env;
             MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         }
@@ -44,16 +52,6 @@ namespace VmProjectBE
             // Allow to use client Factory
             services.AddHttpClient();
 
-            services.AddSession(options =>
-            {
-                options.Cookie.Name = ".VMProject.Session";
-                options.Cookie.HttpOnly = false;
-                options.Cookie.IsEssential = true;
-                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
-                options.IdleTimeout = TimeSpan.FromDays(5);
-            });
-
             services.AddHttpContextAccessor();
 
             services.AddDistributedMemoryCache();
@@ -81,8 +79,6 @@ namespace VmProjectBE
             //this helps to connect the authentication for controllers request to the BasicAuthenticationHandler 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("BasicAuthentication", null);
-
-            DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
             string dbServer = System.Environment.GetEnvironmentVariable("DB_SERVER");
             string dbPort = System.Environment.GetEnvironmentVariable("DB_PORT");
@@ -124,7 +120,6 @@ namespace VmProjectBE
 
             app.UseCors();
 
-            app.UseSession();
             // This tell app that it will use authentication
             app.UseAuthentication();
             app.UseAuthorization();

@@ -11,11 +11,9 @@ namespace VmProjectBE.Controllers
     [ApiController]
     public class LiveprobeController : ControllerBase
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LiveprobeController(IHttpContextAccessor httpContextAccessor)
+        public LiveprobeController()
         {
-            _httpContextAccessor = httpContextAccessor;
         }
 
         // For kubernetes to indicate pod health.
@@ -23,7 +21,6 @@ namespace VmProjectBE.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> GetProbe()
         {
-            _httpContextAccessor.HttpContext.Session.SetInt32("setCookie", 1);
             return Ok();
         }
     }

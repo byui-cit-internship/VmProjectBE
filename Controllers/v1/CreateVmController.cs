@@ -10,22 +10,20 @@ namespace VmProjectBE.Controllers.v1
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class CreateVmController : ControllerBase
+    public class CreateVmController : BeController
     {
-        private readonly VmEntities _context;
-        private readonly ILogger<CreateVmController> _logger;
-        private readonly Authorization _auth;
-        private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateVmController(VmEntities context, ILogger<CreateVmController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
+        public CreateVmController(
+            IConfiguration configuration,
+            ILogger<CreateVmController> logger,
+            IHttpContextAccessor httpContextAccessor,
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-
-            _context = context;
-            _logger = logger;
-            _auth = new(_context, _logger);
-            _httpContextAccessor = httpContextAccessor;
-            _env = env;
         }
 
         /****************************************
@@ -77,9 +75,10 @@ namespace VmProjectBE.Controllers.v1
         [HttpPost("")]
         public async Task<ActionResult> PostCreateVm([FromBody] VmInstance vmInstance)
         {
-            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-            // Gets email from session
-            User user = _auth.getUser(userId);
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
+
+            User user = _auth.GetUser();
             try
             {
                 TagCategory userTC = (from tc in _context.TagCategories

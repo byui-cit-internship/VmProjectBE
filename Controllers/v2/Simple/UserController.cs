@@ -12,28 +12,20 @@ namespace VmProjectBE.Controllers.v2
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BeController
     {
-        private readonly IConfiguration _configuration;
-        private readonly VmEntities _context;
-        private readonly ILogger<UserController> _logger;
-        private readonly Authorization _auth;
-        private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserController(
             IConfiguration configuration,
-            VmEntities context,
             ILogger<UserController> logger,
             IHttpContextAccessor httpContextAccessor,
-            IWebHostEnvironment env)
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-            _configuration = configuration;
-            _context = context;
-            _logger = logger;
-            _auth = new(_context, _logger);
-            _httpContextAccessor = httpContextAccessor;
-            _env = env;
         }
 
         /****************************************
@@ -129,18 +121,10 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] bool? isAdmin,
             [FromQuery] string canvasToken)
         {
-            // Gets email from session
-            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
-                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
-                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
-            User professor = null;
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
 
-            if (!isSystem)
-            {
-                int accessUserId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-                professor = _auth.getAdmin(accessUserId);
-            }
+            User professor = _auth.GetAdmin();
 
             if (isSystem || professor != null)
             {
@@ -249,17 +233,10 @@ namespace VmProjectBE.Controllers.v2
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> PostUser([FromBody] User user)
         {
-            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
-                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
-                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
-            User professor = null;
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
 
-            if (!isSystem)
-            {
-                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-                professor = _auth.getAdmin(userId);
-            }
+            User professor = _auth.GetAdmin();
 
             if (isSystem || professor != null)
             {
@@ -286,18 +263,10 @@ namespace VmProjectBE.Controllers.v2
         [HttpPut("")]
         public async Task<ActionResult> PutUser([FromBody] User user)
         {
-            // Gets email from session
-            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
-                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
-                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
-            User professor = null;
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
 
-            if (!isSystem)
-            {
-                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-                professor = _auth.getAdmin(userId);
-            }
+            User professor = _auth.GetAdmin();
 
             if (isSystem || professor != null)
             {

@@ -8,20 +8,22 @@ namespace VmProjectBE.Services
 {
     public class Authorization
     {
-        private readonly VmEntities _context;
+        private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
-        private readonly IWebHostEnvironment _env;
+        private readonly string _vimaCookie;
+        private readonly VmEntities _context;
 
-        public Authorization(VmEntities context, ILogger logger, IWebHostEnvironment env) 
-            : this(context, logger)
-        {
-            _env = env;
-        }
 
-        public Authorization(VmEntities context, ILogger logger)
+        public Authorization(
+            IConfiguration configuration,
+            ILogger logger,
+            string vimaCookie,
+            VmEntities context)
         {
+            _configuration = configuration;
             _context = context;
             _logger = logger;
+            _vimaCookie = vimaCookie;
         }
 
 
@@ -29,9 +31,17 @@ namespace VmProjectBE.Services
         /****************************************
         Given an email returns either a professor user or null if the email doesn't belong to a professor
         ****************************************/
-        public User getProfessor(int userId, int sectionId)
+        public User GetProfessor(int sectionId)
         {
-            User professor = (from u in _context.Users
+            if (_vimaCookie == _configuration.GetConnectionString("BFF_PASSWORD"))
+            {
+                return null;
+            }
+            User professor = (from st in _context.SessionTokens
+                              join at in _context.AccessTokens
+                              on st.AccessTokenId equals at.AccessTokenId
+                              join u in _context.Users
+                              on at.UserId equals u.UserId
                               join usr in _context.UserSectionRoles
                               on u.UserId equals usr.UserId
                               join r in _context.Roles
@@ -39,8 +49,8 @@ namespace VmProjectBE.Services
                               join s in _context.Sections
                               on usr.SectionId equals s.SectionId
                               where r.RoleName == "Professor"
-                              && u.UserId == userId
                               && s.SectionId == sectionId
+                              && st.SessionTokenValue == Guid.Parse(_vimaCookie)
                               select u).FirstOrDefault();
             return professor;
         }
@@ -48,10 +58,18 @@ namespace VmProjectBE.Services
         /****************************************
         Given an email returns either a user or null if no user exists with the given email
         ****************************************/
-        public User getUser(int userId)
+        public User GetUser()
         {
-            User user = (from u in _context.Users
-                         where u.UserId == userId
+            if (_vimaCookie == _configuration.GetConnectionString("BFF_PASSWORD"))
+            {
+                return null;
+            }
+            User user = (from st in _context.SessionTokens
+                         join at in _context.AccessTokens
+                         on st.AccessTokenId equals at.AccessTokenId
+                         join u in _context.Users
+                         on at.UserId equals u.UserId
+                         where st.SessionTokenValue == Guid.Parse(_vimaCookie)
                          select u).FirstOrDefault();
             return user;
         }
@@ -59,11 +77,19 @@ namespace VmProjectBE.Services
         /****************************************
         Given an email returns either an admin user or null if no admin user exists with the given email
         ****************************************/
-        public User getAdmin(int userId)
+        public User GetAdmin()
         {
-            User admin = (from u in _context.Users
+            if (_vimaCookie == _configuration.GetConnectionString("BFF_PASSWORD"))
+            {
+                return null;
+            }
+            User admin = (from st in _context.SessionTokens
+                          join at in _context.AccessTokens
+                          on st.AccessTokenId equals at.AccessTokenId
+                          join u in _context.Users
+                          on at.UserId equals u.UserId
+                          where st.SessionTokenValue == Guid.Parse(_vimaCookie)
                           where u.IsAdmin
-                          where u.UserId == userId
                           select u).FirstOrDefault();
             return admin;
         }

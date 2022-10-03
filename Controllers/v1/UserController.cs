@@ -9,22 +9,20 @@ namespace VmProjectBE.Controllers.v1
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BeController
     {
-        private readonly VmEntities _context;
-        private readonly ILogger<UserController> _logger;
-        private readonly Authorization _auth;
-        private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(VmEntities context, ILogger<UserController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
+        public UserController(
+            IConfiguration configuration,
+            ILogger<UserController> logger,
+            IHttpContextAccessor httpContextAccessor,
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-
-            _context = context;
-            _logger = logger;
-            _auth = new(_context, _logger);
-            _httpContextAccessor = httpContextAccessor;
-            _env = env;
         }
 
         /****************************************
@@ -34,8 +32,8 @@ namespace VmProjectBE.Controllers.v1
         public async Task<ActionResult> GetCanvasUsers()
         {
             // Gets email from session
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
-
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
             // Returns a professor user or null if email is not associated with a professor
 
             if (isSystem)
