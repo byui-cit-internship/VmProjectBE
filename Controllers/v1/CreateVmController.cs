@@ -124,7 +124,7 @@ namespace VmProjectBE.Controllers.v1
                     _context.TagUsers.Add(tagUser);
                     _context.SaveChanges();
                 }
-
+                // "{\"error_type\":\"INVALID_ARGUMENT\",\"messages\":[{\"args\":[\"CIT270:261d8ca6-5f51-408b-9f00-6179577b2333\"],\"default_message\":\"The provided folder ID CIT270:261d8ca6-5f51-408b-9f00-6179577b2333 is invalid.\",\"id\":\"com.vmware.vdcs.vmtx-main.invalid_folder_id_format\"}]}"
                 _context.VmInstances.Add(vmInstance);
                 _context.SaveChanges();
 
