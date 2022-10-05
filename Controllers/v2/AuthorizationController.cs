@@ -1,7 +1,6 @@
-﻿using VmProjectBE.DAL;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.Services;
+using VmProjectBE.DAL;
 
 namespace VmProjectBE.Controllers.v1
 {
@@ -91,17 +90,13 @@ namespace VmProjectBE.Controllers.v1
             [FromQuery] string authType,
             [FromQuery] int? sectionId = null)
         {
-            switch (authType)
+            return authType switch
             {
-                case "admin":
-                    return Ok(_auth.GetAdmin());
-                case "professor" when sectionId != null:
-                    return Ok(_auth.GetProfessor((int)sectionId));
-                case "user":
-                    return Ok(_auth.GetUser());
-                default:
-                    return BadRequest("AuthType is required and must be either user, professor, or admin. If 'professor' is used, a sectionID must also be present.");
-            }
+                "admin" => Ok(_auth.GetAdmin()),
+                "professor" when sectionId != null => Ok(_auth.GetProfessor((int)sectionId)),
+                "user" => Ok(_auth.GetUser()),
+                _ => BadRequest("AuthType is required and must be either user, professor, or admin. If 'professor' is used, a sectionID must also be present."),
+            };
         }
     }
 }

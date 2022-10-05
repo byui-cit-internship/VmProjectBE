@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using VmProjectBE.DAL;
+﻿using VmProjectBE.DAL;
 using VmProjectBE.Models;
 
 namespace VmProjectBE.Services

@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using VmProjectBE.DAL;
 using VmProjectBE.Models;
-using VmProjectBE.DTO;
 
 namespace VmProjectBE.Handlers
 {
@@ -46,7 +45,8 @@ namespace VmProjectBE.Handlers
                 if (vimaCookie == _configuration.GetConnectionString("BFF_PASSWORD"))
                 {
                     return SuccessResult("BFF application");
-                } else
+                }
+                else
                 {
                     User user = (from st in _context.SessionTokens
                                  join at in _context.AccessTokens

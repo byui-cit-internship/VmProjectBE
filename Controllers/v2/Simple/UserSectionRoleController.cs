@@ -1,10 +1,8 @@
-﻿using VmProjectBE.DAL;
+﻿using Database_VmProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.Services;
+using VmProjectBE.DAL;
 using VmProjectBE.Models;
-using Database_VmProject.Services;
-using System.Linq;
 
 namespace VmProjectBE.Controllers.v2
 {
@@ -84,7 +82,7 @@ namespace VmProjectBE.Controllers.v2
                     case 2:
                         switch (true)
                         {
-                            case bool ifTrue when 
+                            case bool ifTrue when
                             validParameters.Contains("userId") &&
                             validParameters.Contains("sectionId"):
                                 return Ok(

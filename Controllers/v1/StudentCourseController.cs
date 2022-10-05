@@ -1,9 +1,8 @@
-﻿using VmProjectBE.DAL;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.Services;
-using VmProjectBE.Models;
+using VmProjectBE.DAL;
 using VmProjectBE.DTO.v1;
+using VmProjectBE.Models;
 
 namespace VmProjectBE.Controllers.v1
 {
@@ -59,13 +58,13 @@ namespace VmProjectBE.Controllers.v1
                                                         where tc.TagCategoryName == "Course"
                                                         && t.TagName == c.CourseCode
                                                         && u.UserId == queryUserId
-                                                select new CourseListByUserDTO(
-                                                   s.SectionCanvasId,
-                                                   c.CourseName,
-                                                   usr.UserSectionRoleId,
-                                                   $"{u.FirstName} {u.LastName}",
-                                                   tc.TagCategoryVcenterId
-                                                )).ToList();
+                                                        select new CourseListByUserDTO(
+                                                           s.SectionCanvasId,
+                                                           c.CourseName,
+                                                           usr.UserSectionRoleId,
+                                                           $"{u.FirstName} {u.LastName}",
+                                                           tc.TagCategoryVcenterId
+                                                        )).ToList();
 
                 return Ok(courseList);
             }

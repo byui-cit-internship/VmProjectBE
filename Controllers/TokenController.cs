@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using VmProjectBE.DAL;
-using VmProjectBE.Models;
 using VmProjectBE.DTO;
+using VmProjectBE.Models;
 
 namespace VmProjectBE.Controllers
 {
@@ -136,7 +135,7 @@ namespace VmProjectBE.Controllers
         and returns it.
         ****************************************/
         [HttpGet()]
-        public async Task<ActionResult> GetToken([FromQuery]string sessionToken)
+        public async Task<ActionResult> GetToken([FromQuery] string sessionToken)
         {
             try
             {

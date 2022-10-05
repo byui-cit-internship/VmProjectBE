@@ -1,7 +1,6 @@
-﻿using VmProjectBE.DAL;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.Services;
+using VmProjectBE.DAL;
 using VmProjectBE.Models;
 
 namespace VmProjectBE.Controllers.v1

@@ -1,10 +1,10 @@
-﻿using VmProjectBE.DAL;
-using VmProjectBE.Handlers;
-using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json.Serialization;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using VmProjectBE.Services;
+using Newtonsoft.Json.Serialization;
 using System.Reflection;
+using VmProjectBE.DAL;
+using VmProjectBE.Handlers;
+using VmProjectBE.Services;
 
 namespace VmProjectBE
 {

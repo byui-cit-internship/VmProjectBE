@@ -1,10 +1,8 @@
-﻿using VmProjectBE.DAL;
+﻿using Database_VmProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.Services;
+using VmProjectBE.DAL;
 using VmProjectBE.Models;
-using Database_VmProject.Services;
-using System.Linq;
 
 namespace VmProjectBE.Controllers.v2
 {
@@ -61,7 +59,7 @@ namespace VmProjectBE.Controllers.v2
                             case "vmTemplateId":
                                 return Ok(
                                     (from vt in _context.VmTemplates
-                                     where vt.VmTemplateId == vmTemplateId 
+                                     where vt.VmTemplateId == vmTemplateId
                                      select vt).FirstOrDefault());
                             case "vmTemplateVcenterId":
                                 return Ok(
