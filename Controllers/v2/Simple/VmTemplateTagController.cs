@@ -1,38 +1,28 @@
-﻿using VmProjectBE.DAL;
+﻿using Database_VmProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.Services;
+using VmProjectBE.DAL;
 using VmProjectBE.Models;
-using Database_VmProject.Services;
-using System.Linq;
 
 namespace VmProjectBE.Controllers.v2
 {
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class VmTemplateTagController : ControllerBase
+    public class VmTemplateTagController : BeController
     {
-        private readonly IConfiguration _configuration;
-        private readonly VmEntities _context;
-        private readonly ILogger<VmTemplateTagController> _logger;
-        private readonly Authorization _auth;
-        private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public VmTemplateTagController(
             IConfiguration configuration,
-            VmEntities context,
             ILogger<VmTemplateTagController> logger,
             IHttpContextAccessor httpContextAccessor,
-            IWebHostEnvironment env)
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-            _configuration = configuration;
-            _context = context;
-            _logger = logger;
-            _auth = new(_context, _logger);
-            _httpContextAccessor = httpContextAccessor;
-            _env = env;
         }
 
         /****************************************
@@ -44,18 +34,10 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? tagId,
             [FromQuery] int? vmTemplateId)
         {
-            // Gets email from session
-            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
-                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
-                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
-            User professor = null;
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
 
-            if (!isSystem)
-            {
-                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-                professor = _auth.getAdmin(userId);
-            }
+            User professor = _auth.GetAdmin();
 
             if (isSystem || professor != null)
             {
@@ -120,18 +102,10 @@ namespace VmProjectBE.Controllers.v2
         [HttpPost("")]
         public async Task<ActionResult> PostVmTemplateTag([FromBody] VmTemplateTag vmTemplateTag)
         {
-            // Gets email from session
-            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
-                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
-                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
-            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
-            User professor = null;
+            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
+            bool isSystem = bffPassword == _vimaCookie;
 
-            if (!isSystem)
-            {
-                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
-                professor = _auth.getAdmin(userId);
-            }
+            User professor = _auth.GetAdmin();
 
             if (isSystem || professor != null)
             {
