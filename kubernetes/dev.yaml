@@ -48,7 +48,7 @@ spec:
             secretKeyRef:
               name: be-env
               key: BFF_PASSWORD
-        image: rcr.citwdd.net/be-repository/be-vima:latest
+        image: gcr.io/cubs-consulting/be-repository/be-vima:latest
         ports:
         - containerPort: 80        
         resources:
@@ -105,10 +105,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rancher-dev-be.citwdd.net
+    - rancher-dev-be.cit.byui.edu
     secretName: vm-project-be-dev-tls
   rules:
-  - host: rancher-dev-be.citwdd.net
+  - host: rancher-dev-be.cit.byui.edu
     http:
       paths:
       - backend:

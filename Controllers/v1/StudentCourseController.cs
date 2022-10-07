@@ -37,7 +37,6 @@ namespace VmProjectBE.Controllers.v1
         [HttpGet("")]
         public async Task<ActionResult> GetCourseListByUserId([FromQuery] int queryUserId)
         {
-            // Gets email from session
             int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
             // Returns a professor user or null if email is not associated with a professor
