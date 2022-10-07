@@ -80,11 +80,11 @@ namespace VmProjectBE
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("BasicAuthentication", null);
 
-            string dbServer = System.Environment.GetEnvironmentVariable("DB_SERVER");
-            string dbPort = System.Environment.GetEnvironmentVariable("DB_PORT");
-            string dbDatabase = System.Environment.GetEnvironmentVariable("DB_DATABASE");
-            string dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
-            string dbPassword = System.Environment.GetEnvironmentVariable("DB_PASSWORD");
+            string dbServer = Configuration.GetConnectionString("DB_SERVER");
+            string dbPort = Configuration.GetConnectionString("DB_PORT");
+            string dbDatabase = Configuration.GetConnectionString("DB_DATABASE");
+            string dbUser = Configuration.GetConnectionString("DB_USER");
+            string dbPassword = Configuration.GetConnectionString("DB_PASSWORD");
 
             String connectionString = "";
             if (dbServer == null)
