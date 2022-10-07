@@ -1,28 +1,30 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using VmProjectBE.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.DAL;
-using VmProjectBE.DTO.v1;
+using VmProjectBE.Services;
 using VmProjectBE.Models;
+using VmProjectBE.DTO.v1;
 
 namespace VmProjectBE.Controllers.v1
 {
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SectionController : BeController
+    public class SectionController : ControllerBase
     {
+        private readonly VmEntities _context;
+        private readonly ILogger<SectionController> _logger;
+        private readonly Authorization _auth;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SectionController(
-            IConfiguration configuration,
-            ILogger<SectionController> logger,
-            IHttpContextAccessor httpContextAccessor,
-            VmEntities context)
-            : base(
-                  configuration: configuration,
-                  httpContextAccessor: httpContextAccessor,
-                  logger: logger,
-                  context: context)
+        public SectionController(VmEntities context, ILogger<SectionController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
         {
+            _context = context;
+            _logger = logger;
+            _auth = new(_context, _logger);
+            _httpContextAccessor = httpContextAccessor;
+            _env = env;
         }
 
         /****************************************
@@ -31,13 +33,12 @@ namespace VmProjectBE.Controllers.v1
         [HttpGet("sectionList")]
         public async Task<ActionResult> GetSectionListBySemester(string semester)
         {
-            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
-            bool isSystem = bffPassword == _vimaCookie;
+            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
+            // Returns a professor user or null if email is not associated with a professor
+            User professor = _auth.getAdmin(userId);
 
-            User professor = _auth.GetAdmin();
-
-            if (isSystem || professor != null)
+            if (professor != null)
             {
                 // Returns a list of course name, section id, semester, section number, and professor
                 // based on the professor and semester variables

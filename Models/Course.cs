@@ -10,7 +10,7 @@ namespace VmProjectBE.Models
         [Key]
         [Column("course_id", Order = 1)]
         public int CourseId { get; set; }
-
+        
         [Required]
         [Column("course_code", TypeName = "varchar(45)", Order = 2)]
         public string CourseCode { get; set; }

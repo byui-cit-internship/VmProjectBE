@@ -1,29 +1,39 @@
-﻿using Database_VmProject.Services;
+﻿using VmProjectBE.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
-using VmProjectBE.DAL;
+using VmProjectBE.Services;
 using VmProjectBE.Models;
+using Database_VmProject.Services;
+using System.Linq;
+using System.Reflection;
 
 namespace VmProjectBE.Controllers.v2
 {
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class CookieController : BeController
+    public class CookieController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+        private readonly VmEntities _context;
+        private readonly ILogger<CookieController> _logger;
+        private readonly Authorization _auth;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CookieController(
             IConfiguration configuration,
+            VmEntities context,
             ILogger<CookieController> logger,
             IHttpContextAccessor httpContextAccessor,
-            VmEntities context)
-            : base(
-                  configuration: configuration,
-                  httpContextAccessor: httpContextAccessor,
-                  logger: logger,
-                  context: context)
+            IWebHostEnvironment env)
         {
+            _configuration = configuration;
+            _context = context;
+            _logger = logger;
+            _auth = new(_context, _logger);
+            _httpContextAccessor = httpContextAccessor;
+            _env = env;
         }
 
         /****************************************
@@ -50,104 +60,104 @@ namespace VmProjectBE.Controllers.v2
 
             //if (isSystem || professor != null)
             //{
-            List<string> validParameters = QueryParamHelper.ValidateParameters(
-                ("cookieId", cookieId),
-                ("sessionTokenId", sessionTokenId),
-                ("cookieName", cookieName),
-                ("cookieValue", cookieValue),
-                ("siteFrom", siteFrom),
-                ("sessionTokenValue", sessionTokenValue));
-            switch (validParameters.Count)
-            {
-                case 0:
-                    return Ok(
-                        (from c in _context.Cookies
-                         select c).ToList());
-                case 1:
-                    switch (validParameters[0])
-                    {
-                        case "cookieId":
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieId == cookieId
-                                 select c).FirstOrDefault());
-                        case "sessionTokenId":
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.SessionTokenId == sessionTokenId
-                                 select c).ToList());
-                        case "cookieName":
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieName == cookieName
-                                 select c).ToList());
-                        case "cookieValue":
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieValue == cookieValue
-                                 select c).ToList());
-                        case "siteFrom":
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.SiteFrom == siteFrom
-                                 select c).ToList());
-                        default:
-                            return BadRequest("Invalid single parameter. Check documentation.");
-                    }
-                case 2:
-                    switch (true)
-                    {
-                        case bool ifTrue when
-                            validParameters.Contains("sessionTokenId") &&
-                            validParameters.Contains("cookieName"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.SessionTokenId == sessionTokenId
-                                 && c.CookieName == cookieName
-                                 select c).FirstOrDefault());
-                        case bool ifTrue when
-                            validParameters.Contains("sessionTokenId") &&
-                            validParameters.Contains("cookieValue"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.SessionTokenId == sessionTokenId
-                                 && c.CookieValue == cookieValue
-                                 select c).ToList());
-                        case bool ifTrue when
-                            validParameters.Contains("sessionTokenId") &&
-                            validParameters.Contains("siteFrom"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.SessionTokenId == sessionTokenId
-                                 && c.SiteFrom == siteFrom
-                                 select c).ToList());
-                        case bool ifTrue when
-                            validParameters.Contains("cookieName") &&
-                            validParameters.Contains("cookieValue"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieName == cookieName
+                List<string> validParameters = QueryParamHelper.ValidateParameters(
+                    ("cookieId", cookieId),
+                    ("sessionTokenId", sessionTokenId),
+                    ("cookieName", cookieName),
+                    ("cookieValue", cookieValue),
+                    ("siteFrom", siteFrom),
+                    ("sessionTokenValue", sessionTokenValue));
+                switch (validParameters.Count)
+                {
+                    case 0:
+                        return Ok(
+                            (from c in _context.Cookies
+                             select c).ToList());
+                    case 1:
+                        switch (validParameters[0])
+                        {
+                            case "cookieId":
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieId == cookieId
+                                     select c).FirstOrDefault());
+                            case "sessionTokenId":
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.SessionTokenId == sessionTokenId
+                                     select c).ToList());
+                            case "cookieName":
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieName == cookieName
+                                     select c).ToList());
+                            case "cookieValue":
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieValue == cookieValue
+                                     select c).ToList());
+                            case "siteFrom":
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.SiteFrom == siteFrom
+                                     select c).ToList());
+                            default:
+                                return BadRequest("Invalid single parameter. Check documentation.");
+                        }
+                    case 2:
+                        switch (true)
+                        {
+                            case bool ifTrue when
+                                validParameters.Contains("sessionTokenId") &&
+                                validParameters.Contains("cookieName"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.SessionTokenId == sessionTokenId
+                                     && c.CookieName == cookieName
+                                     select c).FirstOrDefault());
+                            case bool ifTrue when
+                                validParameters.Contains("sessionTokenId") &&
+                                validParameters.Contains("cookieValue"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.SessionTokenId == sessionTokenId
                                      && c.CookieValue == cookieValue
-                                 select c).ToList());
-                        case bool ifTrue when
-                            validParameters.Contains("cookieName") &&
-                            validParameters.Contains("siteFrom"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieName == cookieName
+                                     select c).ToList());
+                            case bool ifTrue when
+                                validParameters.Contains("sessionTokenId") &&
+                                validParameters.Contains("siteFrom"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.SessionTokenId == sessionTokenId
                                      && c.SiteFrom == siteFrom
-                                 select c).ToList());
+                                     select c).ToList());
+                            case bool ifTrue when
+                                validParameters.Contains("cookieName") &&
+                                validParameters.Contains("cookieValue"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieName == cookieName
+                                         && c.CookieValue == cookieValue
+                                     select c).ToList());
+                            case bool ifTrue when
+                                validParameters.Contains("cookieName") &&
+                                validParameters.Contains("siteFrom"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieName == cookieName
+                                         && c.SiteFrom == siteFrom
+                                     select c).ToList());
+                            case bool ifTrue when
+                                validParameters.Contains("cookieValue") &&
+                                validParameters.Contains("siteFrom"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieValue == cookieValue
+                                         && c.SiteFrom == siteFrom
+                                     select c).FirstOrDefault());
                         case bool ifTrue when
-                            validParameters.Contains("cookieValue") &&
-                            validParameters.Contains("siteFrom"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieValue == cookieValue
-                                     && c.SiteFrom == siteFrom
-                                 select c).FirstOrDefault());
-                        case bool ifTrue when
-                            validParameters.Contains("siteFrom") &&
-                            validParameters.Contains("sessionTokenValue"):
+                                validParameters.Contains("siteFrom") &&
+                                validParameters.Contains("sessionTokenValue"):
                             return Ok(
                                 (from c in _context.Cookies
                                  join st in _context.SessionTokens
@@ -156,31 +166,31 @@ namespace VmProjectBE.Controllers.v2
                                      && st.SessionTokenValue == Guid.Parse(sessionTokenValue)
                                  select c).FirstOrDefault());
                         default:
-                            return BadRequest("How did you get here?");
-                    }
-                case 3:
-                    switch (true)
-                    {
-                        case bool ifTrue when
-                            validParameters.Contains("cookieName") &&
-                            validParameters.Contains("cookieValue") &&
-                            validParameters.Contains("siteFrom"):
-                            return Ok(
-                                (from c in _context.Cookies
-                                 where c.CookieName == cookieName
-                                 && c.CookieValue == cookieValue
-                                 && c.SiteFrom == siteFrom
-                                 select c).FirstOrDefault());
-                        default:
-                            return BadRequest("How did you get here?");
-                    }
-                default:
-                    return BadRequest("Incorrect parameters entered");
-            }
+                                return BadRequest("How did you get here?");
+                        }
+                    case 3:
+                        switch (true)
+                        {
+                            case bool ifTrue when
+                                validParameters.Contains("cookieName") &&
+                                validParameters.Contains("cookieValue") &&
+                                validParameters.Contains("siteFrom"):
+                                return Ok(
+                                    (from c in _context.Cookies
+                                     where c.CookieName == cookieName
+                                     && c.CookieValue == cookieValue
+                                     && c.SiteFrom == siteFrom
+                                     select c).FirstOrDefault());
+                            default:
+                                return BadRequest("How did you get here?");
+                        }
+                    default:
+                        return BadRequest("Incorrect parameters entered");
+                }
             //}
             //else
             //{
-            return NotFound("Only the BFF application has access to this resource.");
+                return NotFound("Only the BFF application has access to this resource.");
             //}
         }
 
@@ -190,10 +200,17 @@ namespace VmProjectBE.Controllers.v2
         [HttpPost("")]
         public async Task<ActionResult> PostCookie([FromBody] Cookie cookie)
         {
-            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
-            bool isSystem = bffPassword == _vimaCookie;
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            User professor = null;
 
-            User professor = _auth.GetAdmin();
+            if (!isSystem)
+            {
+                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(userId);
+            }
 
             if (isSystem || professor != null)
             {
@@ -220,10 +237,18 @@ namespace VmProjectBE.Controllers.v2
         [HttpPut("")]
         public async Task<ActionResult> PutCookie([FromBody] Cookie cookie)
         {
-            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
-            bool isSystem = bffPassword == _vimaCookie;
+            // Gets email from session
+            string bffPassword = null == Environment.GetEnvironmentVariable("BFF_PASSWORD")
+                                         ? _configuration.GetConnectionString("BFF_PASSWORD")
+                                         : Environment.GetEnvironmentVariable("BFF_PASSWORD");
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == bffPassword;
+            User professor = null;
 
-            User professor = _auth.GetAdmin();
+            if (!isSystem)
+            {
+                int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+                professor = _auth.getAdmin(userId);
+            }
 
             if (isSystem || professor != null)
             {

@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using VmProjectBE.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.DAL;
+using VmProjectBE.Services;
 using VmProjectBE.Models;
 
 namespace VmProjectBE.Controllers.v1
@@ -8,20 +9,22 @@ namespace VmProjectBE.Controllers.v1
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class UserController : BeController
+    public class UserController : ControllerBase
     {
+        private readonly VmEntities _context;
+        private readonly ILogger<UserController> _logger;
+        private readonly Authorization _auth;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(
-            IConfiguration configuration,
-            ILogger<UserController> logger,
-            IHttpContextAccessor httpContextAccessor,
-            VmEntities context)
-            : base(
-                  configuration: configuration,
-                  httpContextAccessor: httpContextAccessor,
-                  logger: logger,
-                  context: context)
+        public UserController(VmEntities context, ILogger<UserController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
         {
+
+            _context = context;
+            _logger = logger;
+            _auth = new(_context, _logger);
+            _httpContextAccessor = httpContextAccessor;
+            _env = env;
         }
 
         /****************************************
@@ -31,8 +34,8 @@ namespace VmProjectBE.Controllers.v1
         public async Task<ActionResult> GetCanvasUsers()
         {
             // Gets email from session
-            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
-            bool isSystem = bffPassword == _vimaCookie;
+            bool isSystem = _httpContextAccessor.HttpContext.Session.GetString("tokenId") == Environment.GetEnvironmentVariable("BFF_PASSWORD");
+
             // Returns a professor user or null if email is not associated with a professor
 
             if (isSystem)

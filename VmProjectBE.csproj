@@ -12,10 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Controllers\v2\Simple\whbe1hl4.ska~" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.dataencryption" Version="3.0.1" />
+    <PackageReference Include="EntityFrameworkCore.EncryptColumn" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">

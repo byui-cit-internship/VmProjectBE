@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using EntityFrameworkCore.EncryptColumn.Attribute;
 
 namespace VmProjectBE.Models
 {
@@ -32,6 +32,7 @@ namespace VmProjectBE.Models
 
 
         [Column("encrypted_canvas_token", TypeName = "varbinary(MAX)", Order = 7)]
-        public Byte[] EncryptedCanvasToken { get; set; }
+
+        public Byte[] EncryptedcanvasToken { get; set; }
     }
 }

@@ -1,26 +1,32 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using VmProjectBE.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.DAL;
+using VmProjectBE.Services;
 
 namespace VmProjectBE.Controllers.v1
 {
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class AuthorizationController : BeController
+    public class AuthorizationController : ControllerBase
     {
+        private readonly VmEntities _context;
+        private readonly ILogger<AuthorizationController> _logger;
+        private readonly Authorization _auth;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthorizationController(
-            IConfiguration configuration,
+            VmEntities context, 
             ILogger<AuthorizationController> logger,
             IHttpContextAccessor httpContextAccessor,
-            VmEntities context)
-            : base(
-                  configuration: configuration,
-                  httpContextAccessor: httpContextAccessor,
-                  logger: logger,
-                  context: context)
+            IWebHostEnvironment env)
         {
+            _context = context;
+            _logger = logger;
+            _auth = new(_context, _logger);
+            _httpContextAccessor = httpContextAccessor;
+            _env = env;
         }
 
         /****************************************
@@ -90,13 +96,18 @@ namespace VmProjectBE.Controllers.v1
             [FromQuery] string authType,
             [FromQuery] int? sectionId = null)
         {
-            return authType switch
+            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            switch (authType)
             {
-                "admin" => Ok(_auth.GetAdmin()),
-                "professor" when sectionId != null => Ok(_auth.GetProfessor((int)sectionId)),
-                "user" => Ok(_auth.GetUser()),
-                _ => BadRequest("AuthType is required and must be either user, professor, or admin. If 'professor' is used, a sectionID must also be present."),
-            };
+                case "admin":
+                    return Ok(_auth.getAdmin(userId));
+                case "professor" when sectionId != null:
+                    return Ok(_auth.getProfessor(userId, (int)sectionId));
+                case "user":
+                    return Ok(_auth.getUser(userId));
+                default:
+                    return BadRequest("AuthType is required and must be either user, professor, or admin. If 'professor' is used, a sectionID must also be present.");
+            }
         }
     }
 }
