@@ -12,7 +12,6 @@ namespace VmProjectBE
     {
         public Startup(IWebHostEnvironment env)
         {
-            DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
