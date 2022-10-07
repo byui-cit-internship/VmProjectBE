@@ -1,18 +1,26 @@
-﻿using VmProjectBE.DAL;
-using VmProjectBE.Handlers;
-using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json.Serialization;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using VmProjectBE.Services;
+using Newtonsoft.Json.Serialization;
 using System.Reflection;
+using VmProjectBE.DAL;
+using VmProjectBE.Handlers;
+using VmProjectBE.Services;
 
 namespace VmProjectBE
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
+
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables("CONSTR");
+
+            Configuration = builder.Build();
             Environment = env;
             MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         }
@@ -44,16 +52,6 @@ namespace VmProjectBE
             // Allow to use client Factory
             services.AddHttpClient();
 
-            services.AddSession(options =>
-            {
-                options.Cookie.Name = ".VMProject.Session";
-                options.Cookie.HttpOnly = false;
-                options.Cookie.IsEssential = true;
-                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
-                options.IdleTimeout = TimeSpan.FromDays(5);
-            });
-
             services.AddHttpContextAccessor();
 
             services.AddDistributedMemoryCache();
@@ -82,13 +80,11 @@ namespace VmProjectBE
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("BasicAuthentication", null);
 
-            DotEnv.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
-
-            string dbServer = System.Environment.GetEnvironmentVariable("DB_SERVER");
-            string dbPort = System.Environment.GetEnvironmentVariable("DB_PORT");
-            string dbDatabase = System.Environment.GetEnvironmentVariable("DB_DATABASE");
-            string dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
-            string dbPassword = System.Environment.GetEnvironmentVariable("DB_PASSWORD");
+            string dbServer = Configuration.GetConnectionString("DB_SERVER");
+            string dbPort = Configuration.GetConnectionString("DB_PORT");
+            string dbDatabase = Configuration.GetConnectionString("DB_DATABASE");
+            string dbUser = Configuration.GetConnectionString("DB_USER");
+            string dbPassword = Configuration.GetConnectionString("DB_PASSWORD");
 
             String connectionString = "";
             if (dbServer == null)
@@ -124,7 +120,6 @@ namespace VmProjectBE
 
             app.UseCors();
 
-            app.UseSession();
             // This tell app that it will use authentication
             app.UseAuthentication();
             app.UseAuthorization();
