@@ -33,7 +33,6 @@ namespace VmProjectBE.Controllers.v1
         [HttpGet("sectionList")]
         public async Task<ActionResult> GetSectionListBySemester(string semester)
         {
-            // Gets email from session
             int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
             // Returns a professor user or null if email is not associated with a professor
