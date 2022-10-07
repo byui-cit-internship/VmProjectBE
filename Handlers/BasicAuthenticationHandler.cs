@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using VmProjectBE.DAL;
 using VmProjectBE.Models;
+using VmProjectBE.DTO;
 
 namespace VmProjectBE.Handlers
 {
@@ -13,7 +14,6 @@ namespace VmProjectBE.Handlers
         private readonly VmEntities _context;
         private readonly ILogger<AppAuthHandler> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IConfiguration _configuration;
 
         // BAsic Authentication needs contructor and this is it below
         public AppAuthHandler(
@@ -23,8 +23,7 @@ namespace VmProjectBE.Handlers
             UrlEncoder encoder,
             VmEntities context,
             ISystemClock clock,
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration
+            IHttpContextAccessor httpContextAccessor
             )
             : base(options, loggerFactory, encoder, clock)
         {
@@ -32,32 +31,93 @@ namespace VmProjectBE.Handlers
             _logger = logger;
             _context = context;
             _httpContextAccessor = httpContextAccessor;
-            _configuration = configuration;
         }
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            string sessionTokenValue = _httpContextAccessor.HttpContext.Session.GetString("sessionTokenValue");
+            string token = _httpContextAccessor.HttpContext.Session.GetString("tokenId");
 
-
-            string vimaCookie = _httpContextAccessor.HttpContext.Request.Cookies["vima-cookie"] ?? null;
-
-            if (vimaCookie != null)
+            if (token == Environment.GetEnvironmentVariable("BFF_PASSWORD"))
             {
-                if (vimaCookie == _configuration.GetConnectionString("BFF_PASSWORD"))
+                return SuccessResult("BFF_APPLICATION");
+            }
+
+            string storedCookie = _httpContextAccessor.HttpContext.Session.GetString("BESessionCookie");
+            string requestCookie = _httpContextAccessor.HttpContext.Request.Cookies[".VMProject.Session"] != null ? $".VMProject.Session={_httpContextAccessor.HttpContext.Request.Cookies[".VMProject.Session"]}" : null;
+
+            if (storedCookie == requestCookie && storedCookie != null)
+            {
+                User user = (from st in _context.SessionTokens
+                             join at in _context.AccessTokens
+                             on st.AccessTokenId equals at.AccessTokenId
+                             join u in _context.Users
+                             on at.UserId equals u.UserId
+                             where st.SessionTokenValue == Guid.Parse(sessionTokenValue)
+                             select u).FirstOrDefault();
+                if (user != null)
                 {
-                    return SuccessResult("BFF application");
+                    return SuccessResult(user.Email);
                 }
-                else
+            }
+            else if (storedCookie == null && requestCookie == null)
+            {
+                return AuthenticateResult.Fail("No session established");
+            }
+            else if (requestCookie != null)
+            {
+                if (storedCookie == null)
                 {
-                    User user = (from st in _context.SessionTokens
-                                 join at in _context.AccessTokens
-                                 on st.AccessTokenId equals at.AccessTokenId
-                                 join u in _context.Users
-                                 on at.UserId equals u.UserId
-                                 where st.SessionTokenValue == Guid.Parse(vimaCookie)
-                                 select u).FirstOrDefault();
-                    if (user != null)
+                    string[] cookieParts = requestCookie.Split('=', 2);
+                    Cookie dbCookie = (from c in _context.Cookies
+                                       where c.CookieName == cookieParts[0]
+                                       && c.CookieValue == cookieParts[1]
+                                       && c.SiteFrom == "BE"
+                                       select c).FirstOrDefault();
+
+                    if (dbCookie != null)
                     {
-                        return SuccessResult(user.Email);
+                        UserSession userSession = (from c in _context.Cookies
+                                                   join st in _context.SessionTokens
+                                                   on c.SessionTokenId equals st.SessionTokenId
+                                                   join at in _context.AccessTokens
+                                                   on st.AccessTokenId equals at.AccessTokenId
+                                                   join u in _context.Users
+                                                   on at.UserId equals u.UserId
+                                                   where c == dbCookie
+                                                   select new UserSession(
+                                                       u,
+                                                       st)).FirstOrDefault();
+
+                        _httpContextAccessor.HttpContext.Session.SetString("BESessionCookie", $"{dbCookie.CookieName}={dbCookie.CookieValue}");
+                        _httpContextAccessor.HttpContext.Session.SetString("sessionTokenValue", userSession.SessionToken.SessionTokenValue.ToString());
+                        _httpContextAccessor.HttpContext.Session.SetString("userId", userSession.User.UserId.ToString());
+
+                        return SuccessResult(userSession.User.Email);
+                    }
+                }
+                else if (storedCookie != null)
+                {
+                    string[] cookiePartsStored = storedCookie.Split('=', 2);
+                    string[] cookiePartsRequest = requestCookie.Split('=', 2);
+                    Cookie dbCookie = (from c in _context.Cookies
+                                       where c.CookieName == cookiePartsStored[0]
+                                       && c.CookieValue == cookiePartsStored[1]
+                                       && c.SiteFrom == "BE"
+                                       select c).FirstOrDefault();
+                    if (dbCookie != null)
+                    {
+                        dbCookie.CookieValue = cookiePartsRequest[1];
+                        User user = (from st in _context.SessionTokens
+                                     join at in _context.AccessTokens
+                                     on st.AccessTokenId equals at.AccessTokenId
+                                     join u in _context.Users
+                                     on at.UserId equals u.UserId
+                                     where st.SessionTokenValue == Guid.Parse(sessionTokenValue)
+                                     select u).FirstOrDefault();
+                        if (user != null)
+                        {
+                            return SuccessResult(user.Email);
+                        }
                     }
                 }
             }

@@ -1,28 +1,34 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using VmProjectBE.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.DAL;
-using VmProjectBE.DTO.v1;
+using VmProjectBE.Services;
 using VmProjectBE.Models;
+using VmProjectBE.DTO.v1;
 
 namespace VmProjectBE.Controllers.v1
 {
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class StudentCourseController : BeController
+    public class StudentCourseController : ControllerBase
     {
+        private readonly VmEntities _context;
+        private readonly ILogger<StudentCourseController> _logger;
+        private readonly Authorization _auth;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public StudentCourseController(
-            IConfiguration configuration,
+            VmEntities context, 
             ILogger<StudentCourseController> logger,
             IHttpContextAccessor httpContextAccessor,
-            VmEntities context)
-            : base(
-                  configuration: configuration,
-                  httpContextAccessor: httpContextAccessor,
-                  logger: logger,
-                  context: context)
+            IWebHostEnvironment env)
         {
+            _context = context;
+            _logger = logger;
+            _auth = new(_context, _logger);
+            _httpContextAccessor = httpContextAccessor;
+            _env = env;
         }
 
         /****************************************
@@ -31,13 +37,12 @@ namespace VmProjectBE.Controllers.v1
         [HttpGet("")]
         public async Task<ActionResult> GetCourseListByUserId([FromQuery] int queryUserId)
         {
-            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
-            bool isSystem = bffPassword == _vimaCookie;
+            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
 
+            // Returns a professor user or null if email is not associated with a professor
+            User user = _auth.getUser(userId);
 
-            User user = _auth.GetUser();
-
-            if (isSystem || user != null)
+            if (user != null)
             {
                 // Returns a list of course name, section id, semester, section number, and professor
                 // based on the professor and semester variables
@@ -59,13 +64,13 @@ namespace VmProjectBE.Controllers.v1
                                                         where tc.TagCategoryName == "Course"
                                                         && t.TagName == c.CourseCode
                                                         && u.UserId == queryUserId
-                                                        select new CourseListByUserDTO(
-                                                           s.SectionCanvasId,
-                                                           c.CourseName,
-                                                           usr.UserSectionRoleId,
-                                                           $"{u.FirstName} {u.LastName}",
-                                                           tc.TagCategoryVcenterId
-                                                        )).ToList();
+                                                select new CourseListByUserDTO(
+                                                   s.SectionCanvasId,
+                                                   c.CourseName,
+                                                   usr.UserSectionRoleId,
+                                                   $"{u.FirstName} {u.LastName}",
+                                                   tc.TagCategoryVcenterId
+                                                )).ToList();
 
                 return Ok(courseList);
             }

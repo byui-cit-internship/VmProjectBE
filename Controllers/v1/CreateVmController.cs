@@ -1,28 +1,31 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using VmProjectBE.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VmProjectBE.DAL;
-using VmProjectBE.DTO.v1;
+using VmProjectBE.Services;
 using VmProjectBE.Models;
+using VmProjectBE.DTO.v1;
 
 namespace VmProjectBE.Controllers.v1
 {
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class CreateVmController : BeController
+    public class CreateVmController : ControllerBase
     {
+        private readonly VmEntities _context;
+        private readonly ILogger<CreateVmController> _logger;
+        private readonly Authorization _auth;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateVmController(
-            IConfiguration configuration,
-            ILogger<CreateVmController> logger,
-            IHttpContextAccessor httpContextAccessor,
-            VmEntities context)
-            : base(
-                  configuration: configuration,
-                  httpContextAccessor: httpContextAccessor,
-                  logger: logger,
-                  context: context)
+        public CreateVmController(VmEntities context, ILogger<CreateVmController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
         {
+
+            _context = context;
+            _logger = logger;
+            _auth = new(_context, _logger);
+            _httpContextAccessor = httpContextAccessor;
+            _env = env;
         }
 
         /****************************************
@@ -74,10 +77,9 @@ namespace VmProjectBE.Controllers.v1
         [HttpPost("")]
         public async Task<ActionResult> PostCreateVm([FromBody] VmInstance vmInstance)
         {
-            string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
-            bool isSystem = bffPassword == _vimaCookie;
-
-            User user = _auth.GetUser();
+            int userId = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("userId"));
+            // Gets email from session
+            User user = _auth.getUser(userId);
             try
             {
                 TagCategory userTC = (from tc in _context.TagCategories
