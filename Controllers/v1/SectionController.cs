@@ -34,6 +34,7 @@ namespace VmProjectBE.Controllers.v1
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
+
             User professor = _auth.GetAdmin();
 
             if (isSystem || professor != null)

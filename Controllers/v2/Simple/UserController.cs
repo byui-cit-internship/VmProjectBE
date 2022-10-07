@@ -157,6 +157,11 @@ namespace VmProjectBE.Controllers.v2
                                     (from u in _context.Users
                                      where u.CanvasToken == canvasToken
                                      select u).FirstOrDefault());
+                            case "isAdmin":
+                                return Ok(
+                                    (from u in _context.Users
+                                     where u.IsAdmin == isAdmin
+                                     select u).ToList());
                             default:
                                 return BadRequest("Invalid single parameter. Check documentation.");
                         }
