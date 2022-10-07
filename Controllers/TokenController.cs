@@ -1,34 +1,32 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using VmProjectBE.DAL;
-using VmProjectBE.Models;
 using VmProjectBE.DTO;
+using VmProjectBE.Models;
 
 namespace VmProjectBE.Controllers
 {
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class TokenController : ControllerBase
+    public class TokenController : BeController
     {
-        private readonly VmEntities _context;
-        private readonly ILogger<TokenController> _logger;
-
-        public IHttpClientFactory _httpClientFactory { get; }
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        public IHttpClientFactory HttpClientFactory { get; }
 
         public TokenController(
-            VmEntities context,
+            IConfiguration configuration,
             ILogger<TokenController> logger,
             IHttpClientFactory httpClientFactory,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            VmEntities context)
+            : base(
+                  configuration: configuration,
+                  httpContextAccessor: httpContextAccessor,
+                  logger: logger,
+                  context: context)
         {
-            _context = context;
-            _logger = logger;
-            _httpClientFactory = httpClientFactory;
-            _httpContextAccessor = httpContextAccessor;
+            HttpClientFactory = httpClientFactory;
         }
 
         /**************************************
@@ -41,32 +39,21 @@ namespace VmProjectBE.Controllers
         {
             try
             {
-                AccessTokenDTO backendCookie = new();
-                backendCookie.CookieName = ".VMProject.Session";
-                backendCookie.CookieValue = _httpContextAccessor.HttpContext.Request.Cookies[backendCookie.CookieName];
-                backendCookie.SiteFrom = "BE";
-
-                if (backendCookie.CookieValue == null)
-                {
-                    return StatusCode(500, "Session cookie not set. Try again.");
-                }
-
                 if (accessTokenObj.AccessTokenValue == Environment.GetEnvironmentVariable("BFF_PASSWORD"))
                 {
-                    _httpContextAccessor.HttpContext.Session.SetString("tokenId", Environment.GetEnvironmentVariable("BFF_PASSWORD"));
                     return Ok();
                 }
 
-                HttpClient httpClient = _httpClientFactory.CreateClient();
+                HttpClient httpClient = HttpClientFactory.CreateClient();
                 HttpResponseMessage response = await httpClient.GetAsync($"https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={accessTokenObj.AccessTokenValue}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responseString = await response.Content.ReadAsStringAsync();
 
-                    dynamic students = JsonConvert.DeserializeObject<dynamic>(responseString);
+                    dynamic googleUser = JsonConvert.DeserializeObject<dynamic>(responseString);
 
-                    string email = students.email;
+                    string email = googleUser.email;
 
                     User user = (from u in _context.Users
                                  where u.Email == email
@@ -74,16 +61,14 @@ namespace VmProjectBE.Controllers
 
                     if (user == null)
                     {
-
                         user = new User();
                         user.Email = email;
-                        user.FirstName = students.given_name;
-                        user.LastName = students.family_name;
+                        user.FirstName = googleUser.given_name;
+                        user.LastName = googleUser.family_name;
                         user.IsAdmin = false;
 
                         _context.Users.Add(user); ;
                         _context.SaveChanges();
-
                     }
 
                     AccessToken accessToken = (from at in _context.AccessTokens
@@ -124,38 +109,23 @@ namespace VmProjectBE.Controllers
                         return Forbid();
                     }
 
-                    Cookie beCookie = new();
-                    beCookie.CookieName = backendCookie.CookieName;
-                    beCookie.CookieValue = backendCookie.CookieValue;
-                    beCookie.SiteFrom = backendCookie.SiteFrom;
-                    beCookie.SessionTokenId = sessionToken.SessionTokenId;
-                    _context.Cookies.Add(beCookie);
-
-                    Cookie bffCookie = new();
-                    bffCookie.CookieName = accessTokenObj.CookieName;
-                    bffCookie.CookieValue = accessTokenObj.CookieValue;
-                    bffCookie.SiteFrom = accessTokenObj.SiteFrom;
-                    bffCookie.SessionTokenId = sessionToken.SessionTokenId;
-
-                    _context.Cookies.Add(bffCookie);
-                    _context.SaveChanges();
-
-                    _httpContextAccessor.HttpContext.Session.SetString("BESessionCookie", $"{beCookie.CookieName}={beCookie.CookieValue}");
-                    _httpContextAccessor.HttpContext.Session.SetString("sessionTokenValue", sessionToken.SessionTokenValue.ToString());
-                    _httpContextAccessor.HttpContext.Session.SetString("userId", user.UserId.ToString());
+                    _httpContextAccessor.HttpContext.Response.Cookies.Append(
+                        "vima-cookie",
+                        $"{sessionToken.SessionTokenValue}",
+                        new CookieOptions() { SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
 
                     // outside return statment
                     return Ok((user, sessionToken.SessionTokenValue.ToString()));
                 }
                 else
                 {
-                    return BadRequest();
+                    return StatusCode((int)response.StatusCode, $"Call to google to validate accessToken failed with status code: {(int)response.StatusCode}");
                 }
 
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, $"Failed with error: {ex.Message}");
 
             }
         }
@@ -165,18 +135,16 @@ namespace VmProjectBE.Controllers
         and returns it.
         ****************************************/
         [HttpGet()]
-        public async Task<ActionResult> GetToken()
+        public async Task<ActionResult> GetToken([FromQuery] string sessionToken)
         {
             try
             {
-                string sessionId = _httpContextAccessor.HttpContext.Session.GetString("tokenId");
-
                 User user = (from st in _context.SessionTokens
                              join at in _context.AccessTokens
                              on st.AccessTokenId equals at.AccessTokenId
                              join u in _context.Users
                              on at.UserId equals u.UserId
-                             where st.SessionTokenValue == Guid.Parse(sessionId)
+                             where st.SessionTokenValue == Guid.Parse(sessionToken)
                              select u).FirstOrDefault();
                 return Ok(user);
             }
@@ -190,8 +158,7 @@ namespace VmProjectBE.Controllers
         [HttpDelete()]
         public async Task<ActionResult> DeleteSession()
         {
-            _httpContextAccessor.HttpContext.Session.Clear();
-            _httpContextAccessor.HttpContext.Response.Cookies.Delete(".VMProject.Session");
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("vima-cookie");
             return Ok();
         }
     }
