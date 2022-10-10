@@ -38,8 +38,8 @@ namespace VmProjectBE.Controllers
         public async Task<ActionResult> PostToken([FromBody] AccessTokenDTO accessTokenObj)
         {
             try
-            {
-                if (accessTokenObj.AccessTokenValue == Environment.GetEnvironmentVariable("BFF_PASSWORD"))
+            {   
+                if (accessTokenObj.AccessTokenValue == _configuration.GetConnectionString("BFF_PASSWORD"))
                 {
                     return Ok();
                 }
