@@ -12,7 +12,6 @@ namespace VmProjectBE
     {
         public Startup(IWebHostEnvironment env)
         {
-
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
