@@ -28,10 +28,9 @@ namespace VmProjectBE.Controllers.v2
         /****************************************
 
         ****************************************/
-        [HttpGet("")]
+        [HttpGet()]
         [AllowAnonymous]
         public async Task<ActionResult> GetUserVmInstance(
-            [FromQuery] int? userId,
             [FromQuery] int? vmInstanceId,
             [FromQuery] int? sectionId)
         {
@@ -47,7 +46,6 @@ namespace VmProjectBE.Controllers.v2
             //if (isSystem || professor != null)
             //{
             List<string> validParameters = QueryParamHelper.ValidateParameters(
-                ("userId", userId),
                 ("vmInstanceId", vmInstanceId),
                 ("sectionId", sectionId));
             switch (validParameters.Count)
@@ -55,27 +53,7 @@ namespace VmProjectBE.Controllers.v2
                 case 0:
                     return BadRequest("Must provide at least one parameter");
                 case 1:
-                    switch (validParameters[0])
-                    {
-                        case "userId":
-                            return Ok(
-                                (from u in _context.Users
-                                join tu in _context.TagUsers
-                                on u.UserId equals tu.UserId
-                                join t in _context.Tags
-                                on tu.TagId equals t.TagId
-                                join tc in _context.TagCategories
-                                on t.TagCategoryId equals tc.TagCategoryId
-                                join vit in _context.VmInstanceTags
-                                on t.TagId equals vit.TagId
-                                join vi in _context.VmInstances
-                                on vit.VmInstanceId equals vi.VmInstanceId
-                                where u.UserId == userId
-                                where tc.TagCategoryName == "User"
-                                select new UserVmInstance(
-                                    u,
-                                    vi
-                                )).ToList());
+                    switch (validParameters[0]) {
                         case "vmInstanceId":
                             return Ok();
                         case "sectionId":
