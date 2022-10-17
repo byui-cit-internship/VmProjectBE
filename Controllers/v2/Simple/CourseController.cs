@@ -33,7 +33,8 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,
             [FromQuery] string courseName,
-            [FromQuery] int? resourceGroupTemplateId)
+            [FromQuery] int? resourceGroupTemplateId,
+            [FromQuery] int? userId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -46,7 +47,8 @@ namespace VmProjectBE.Controllers.v2
                     ("courseId", courseId),
                     ("courseCode", courseCode),
                     ("courseName", courseName),
-                    ("resourceGroupTemplateId", resourceGroupTemplateId));
+                    ("resourceGroupTemplateId", resourceGroupTemplateId),
+                    ("userId", userId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -66,7 +68,15 @@ namespace VmProjectBE.Controllers.v2
                                     (from c in _context.Courses
                                      where c.CourseName == courseName
                                      select c).FirstOrDefault());
-
+                            case "userId":
+                                return Ok(
+                                    (from c in _context.Courses
+                                     join s in _context.Sections
+                                     on c.CourseId equals s.CourseId
+                                     join usr in _context.UserSectionRoles
+                                     on s.SectionId equals usr.SectionId
+                                     where usr.UserId == userId
+                                     select c).ToList());
                             default:
                                 return BadRequest("Incorrect parameters entered");
                         }
