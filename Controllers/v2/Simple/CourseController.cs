@@ -33,8 +33,7 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,
             [FromQuery] string courseName,
-            [FromQuery] int? resourceGroupTemplateId,
-            [FromQuery] int? vmTemplateId)
+            [FromQuery] int? resourceGroupTemplateId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -47,8 +46,7 @@ namespace VmProjectBE.Controllers.v2
                     ("courseId", courseId),
                     ("courseCode", courseCode),
                     ("courseName", courseName),
-                    ("resourceGroupTemplateId", resourceGroupTemplateId),
-                    ("vmTemplateId", vmTemplateId));
+                    ("resourceGroupTemplateId", resourceGroupTemplateId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -68,22 +66,6 @@ namespace VmProjectBE.Controllers.v2
                                     (from c in _context.Courses
                                      where c.CourseName == courseName
                                      select c).FirstOrDefault());
-
-                            case "vmTemplateId":
-                                return Ok(
-                                    (from vt in _context.VmTemplates
-                                    join vtt in _context.VmTemplateTags
-                                    on vt.VmTemplateId equals vtt.VmTemplateId
-                                    join t in _context.Tags
-                                    on vtt.TagId equals t.TagId
-                                    join tc in _context.TagCategories
-                                    on t.TagCategoryId equals tc.TagCategoryId
-                                    join c in _context.Courses
-                                    on t.TagName equals c.CourseCode
-                                    where tc.TagCategoryName == "Course"
-                                    where vt.VmTemplateId == vmTemplateId
-                                    select c).FirstOrDefault()
-                                );
 
                             default:
                                 return BadRequest("Incorrect parameters entered");
