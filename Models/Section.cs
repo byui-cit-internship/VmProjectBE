@@ -35,7 +35,13 @@ namespace VmProjectBE.Models
         [Column("section_canvas_id", Order = 7)]
         public int SectionCanvasId { get; set; }
 
+        [Required]
+        [Column("section_name", Order = 8)]
+        public string SectionName { get; set; }
 
+        [Required]
+        [Column("library_id", Order = 9)]
+        public string LibraryId { get; set; }
 
         [ForeignKey("CourseId")]
         public Course Course { get; set; }

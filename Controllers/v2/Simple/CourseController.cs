@@ -32,7 +32,6 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> GetCourse(
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,
-            [FromQuery] string courseName,
             [FromQuery] int? resourceGroupTemplateId,
             [FromQuery] int? vmTemplateId)
         {
@@ -46,7 +45,6 @@ namespace VmProjectBE.Controllers.v2
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("courseId", courseId),
                     ("courseCode", courseCode),
-                    ("courseName", courseName),
                     ("resourceGroupTemplateId", resourceGroupTemplateId),
                     ("vmTemplateId", vmTemplateId));
                 switch (validParameters.Count)
@@ -63,10 +61,10 @@ namespace VmProjectBE.Controllers.v2
                                     (from c in _context.Courses
                                      where c.CourseId == courseId
                                      select c).FirstOrDefault());
-                            case "courseName":
+                            case "courseCode":
                                 return Ok(
                                     (from c in _context.Courses
-                                     where c.CourseName == courseName
+                                     where c.CourseCode == courseCode
                                      select c).FirstOrDefault());
                             case "vmTemplateId":
                                 return Ok(
