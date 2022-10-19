@@ -55,6 +55,7 @@ namespace VmProjectBE.Controllers.v1
                                                 where u.Email == professor.Email
                                                 && sem.SemesterTerm == semester
                                                 select new SectionDTO(
+                                                    c.CourseCode,
                                                     c.CourseName,
                                                     sec.SectionId,
                                                     sem.SemesterTerm,
