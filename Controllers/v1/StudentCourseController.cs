@@ -49,7 +49,7 @@ namespace VmProjectBE.Controllers.v1
                                                         join c in _context.Courses
                                                         on s.CourseId equals c.CourseId
                                                         join t in _context.Tags
-                                                        on c.CourseName equals t.TagName
+                                                        on c.CourseCode equals t.TagName
                                                         join tc in _context.TagCategories
                                                         on t.TagCategoryId equals tc.TagCategoryId
                                                         join vtt in _context.VmTemplateTags
@@ -61,7 +61,7 @@ namespace VmProjectBE.Controllers.v1
                                                         && u.UserId == queryUserId
                                                         select new CourseListByUserDTO(
                                                            s.SectionCanvasId,
-                                                           c.CourseName,
+                                                           s.SectionName,
                                                            usr.UserSectionRoleId,
                                                            $"{u.FirstName} {u.LastName}",
                                                            tc.TagCategoryVcenterId

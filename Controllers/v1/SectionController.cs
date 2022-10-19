@@ -56,7 +56,7 @@ namespace VmProjectBE.Controllers.v1
                                                 && sem.SemesterTerm == semester
                                                 select new SectionDTO(
                                                     c.CourseCode,
-                                                    c.CourseName,
+                                                    sec.SectionName,
                                                     sec.SectionId,
                                                     sem.SemesterTerm,
                                                     sec.SectionNumber,
