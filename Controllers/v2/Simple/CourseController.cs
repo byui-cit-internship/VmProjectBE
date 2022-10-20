@@ -66,7 +66,20 @@ namespace VmProjectBE.Controllers.v2
                                     (from c in _context.Courses
                                      where c.CourseCode == courseCode
                                      select c).FirstOrDefault());
-
+                            case "vmTemplateId":
+                                return Ok(
+                                    (from vt in _context.VmTemplates
+                                     join vtt in _context.VmTemplateTags
+                                     on vt.VmTemplateId equals vtt.VmTemplateId
+                                     join t in _context.Tags
+                                     on vtt.TagId equals t.TagId
+                                     join tc in _context.TagCategories
+                                     on t.TagCategoryId equals tc.TagCategoryId
+                                     join c in _context.Courses
+                                     on t.TagName equals c.CourseCode
+                                     where tc.TagCategoryName == "Course"
+                                     where vt.VmTemplateId == vmTemplateId
+                                     select c).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");
                         }
