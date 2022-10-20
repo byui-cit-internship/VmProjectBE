@@ -32,21 +32,21 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> GetCourse(
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,
-            [FromQuery] string courseName,
-            [FromQuery] int? resourceGroupTemplateId)
+            [FromQuery] int? resourceGroupTemplateId,
+            [FromQuery] int? vmTemplateId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
-            User professor = _auth.GetAdmin();
+            User user = _auth.GetUser();
 
-            if (isSystem || professor != null)
+            if (isSystem || user != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("courseId", courseId),
                     ("courseCode", courseCode),
-                    ("courseName", courseName),
-                    ("resourceGroupTemplateId", resourceGroupTemplateId));
+                    ("resourceGroupTemplateId", resourceGroupTemplateId),
+                    ("vmTemplateId", vmTemplateId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -61,10 +61,10 @@ namespace VmProjectBE.Controllers.v2
                                     (from c in _context.Courses
                                      where c.CourseId == courseId
                                      select c).FirstOrDefault());
-                            case "courseName":
+                            case "courseCode":
                                 return Ok(
                                     (from c in _context.Courses
-                                     where c.CourseName == courseName
+                                     where c.CourseCode == courseCode
                                      select c).FirstOrDefault());
 
                             default:
@@ -89,9 +89,9 @@ namespace VmProjectBE.Controllers.v2
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
-            User professor = _auth.GetAdmin();
+            User user = _auth.GetUser();
 
-            if (isSystem || professor != null)
+            if (isSystem || user != null)
             {
                 try
                 {

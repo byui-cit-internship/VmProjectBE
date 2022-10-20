@@ -16,11 +16,7 @@ namespace VmProjectBE.Models
         public string CourseCode { get; set; }
 
         [Required]
-        [Column("course_name", TypeName = "varchar(75)", Order = 3)]
-        public string CourseName { get; set; }
-
-        [Required]
-        [Column("resource_group_id", Order = 4)]
+        [Column("resource_group_id", Order = 3)]
         public int ResourceGroupId { get; set; }
 
 

@@ -31,10 +31,12 @@ namespace VmProjectBE.Controllers.v2
         [HttpGet("")]
         public async Task<ActionResult> GetSection(
             [FromQuery] int? sectionId,
+            [FromQuery] string sectionName,
             [FromQuery] int? courseId,
             [FromQuery] int? semesterId,
             [FromQuery] int? folderId,
             [FromQuery] int? resourceGroupId,
+            [FromQuery] string libraryId,
             [FromQuery] int? sectionNumber,
             [FromQuery] int? sectionCanvasId,
             [FromQuery] int? userId)
@@ -48,6 +50,7 @@ namespace VmProjectBE.Controllers.v2
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("sectionId", sectionId),
+                    ("sectionName", sectionName),
                     ("courseId", courseId),
                     ("semesterId", semesterId),
                     ("folderId", folderId),

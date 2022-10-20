@@ -60,7 +60,7 @@ namespace VmProjectBE.Controllers.v1
                                           && tc.TagCategoryName == "Course"
                                           select new CreateVmDTO(
                                               $"{u.FirstName} {u.LastName}",
-                                              c.CourseName,
+                                              sec.SectionName,
                                               c.CourseId,
                                               vt.VmTemplateVcenterId,
                                               sem.SemesterTerm,
