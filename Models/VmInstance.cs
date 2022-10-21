@@ -15,12 +15,16 @@ namespace VmProjectBE.Models
         [Column("vm_template_id", Order = 2)]
         public int VmTemplateId { get; set; }
 
+
+        [Column("vm_instance_vcenter_name", Order = 3)]
+        public string VmInstanceVcenterName {get; set;}
+
         [Required]
-        [Column("vm_instance_vcenter_id", TypeName = "varchar(50)", Order = 3)]
+        [Column("vm_instance_vcenter_id", TypeName = "varchar(50)", Order = 4)]
         public string VmInstanceVcenterId { get; set; }
 
         [Required]
-        [Column("vm_instance_expire_date", TypeName = "datetime2(7)", Order = 4)]
+        [Column("vm_instance_expire_date", TypeName = "datetime2(7)", Order = 5)]
         public DateTime VmInstanceExpireDate { get; set; }
 
 

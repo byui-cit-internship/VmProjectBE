@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20221019185941_NoMoreCourseName")]
+    partial class NoMoreCourseName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -594,11 +596,6 @@ namespace Database_VmProject.Migrations
                         .HasColumnType("varchar(30)")
                         .HasColumnName("email")
                         .HasColumnOrder(4);
-                        
-                    b.Property<byte>("EmailIsVerified")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("email_is_verified")
-                        .HasColumnOrder(8);
 
                     b.Property<byte[]>("EncryptedCanvasToken")
                         .HasColumnType("varbinary(MAX)")
@@ -621,16 +618,6 @@ namespace Database_VmProject.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("last_name")
                         .HasColumnOrder(3);
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2(7)")
-                        .HasColumnName("verification_code_expiration")
-                        .HasColumnOrder(10);
-
-                    b.Property<int>("VerificationCode")
-                        .HasColumnType("int")
-                        .HasColumnName("verification_code")
-                        .HasColumnOrder(9);
 
                     b.HasKey("UserId");
 
@@ -740,17 +727,12 @@ namespace Database_VmProject.Migrations
                     b.Property<DateTime>("VmInstanceExpireDate")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("vm_instance_expire_date")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(4);
 
                     b.Property<string>("VmInstanceVcenterId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("vm_instance_vcenter_id")
-                        .HasColumnOrder(4);
-
-                    b.Property<string>("VmInstanceVcenterName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("vm_instance_vcenter_name")
                         .HasColumnOrder(3);
 
                     b.Property<int>("VmTemplateId")

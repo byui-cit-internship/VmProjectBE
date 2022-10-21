@@ -33,7 +33,8 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? vmInstanceId,
             [FromQuery] int? vmTemplateId,
             [FromQuery] string vmInstanceVcenterId,
-            [FromQuery] DateTime? vmInstanceExpireDate)
+            [FromQuery] DateTime? vmInstanceExpireDate,
+            [FromQuery] int? userId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -46,7 +47,8 @@ namespace VmProjectBE.Controllers.v2
                     ("vmInstanceId", vmInstanceId),
                     ("vmTemplateId", vmTemplateId),
                     ("vmInstanceVcenterId", vmInstanceVcenterId),
-                    ("vmInstanceExpireDate", vmInstanceExpireDate));
+                    ("vmInstanceExpireDate", vmInstanceExpireDate),
+                    ("userId", userId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -71,6 +73,22 @@ namespace VmProjectBE.Controllers.v2
                                     (from vi in _context.VmInstances
                                      where vi.VmInstanceVcenterId == vmInstanceVcenterId
                                      select vi).FirstOrDefault());
+                            case "userId":
+                                return Ok(
+                                    (from u in _context.Users
+                                    join tu in _context.TagUsers
+                                    on u.UserId equals tu.UserId
+                                    join t in _context.Tags
+                                    on tu.TagId equals t.TagId
+                                    join tc in _context.TagCategories
+                                    on t.TagCategoryId equals tc.TagCategoryId
+                                    join vit in _context.VmInstanceTags
+                                    on t.TagId equals vit.TagId
+                                    join vi in _context.VmInstances
+                                    on vit.VmInstanceId equals vi.VmInstanceId
+                                    where u.UserId == userId
+                                    where tc.TagCategoryName == "User"
+                                    select vi).ToList());
                             default:
                                 return BadRequest("Invalid single parameter. Check documentation.");
                         }

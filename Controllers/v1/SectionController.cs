@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using VmProjectBE.DAL;
 using VmProjectBE.DTO.v1;
 using VmProjectBE.Models;
+using Newtonsoft.Json;
 
 namespace VmProjectBE.Controllers.v1
 {
@@ -29,8 +30,9 @@ namespace VmProjectBE.Controllers.v1
         Returns secions taught by a professor in a given semester
         ****************************************/
         [HttpGet("sectionList")]
-        public async Task<ActionResult> GetSectionListBySemester(string semester)
+        public async Task<ActionResult> GetSectionListBySemester([FromQuery] string semester)
         {
+            _logger.LogInformation(semester);
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
@@ -53,7 +55,8 @@ namespace VmProjectBE.Controllers.v1
                                                 where u.Email == professor.Email
                                                 && sem.SemesterTerm == semester
                                                 select new SectionDTO(
-                                                    c.CourseName,
+                                                    c.CourseCode,
+                                                    sec.SectionName,
                                                     sec.SectionId,
                                                     sem.SemesterTerm,
                                                     sec.SectionNumber,

@@ -117,7 +117,8 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] string lastName,
             [FromQuery] string email,
             [FromQuery] bool? isAdmin,
-            [FromQuery] string canvasToken)
+            [FromQuery] string canvasToken,
+            [FromQuery] int? sectionId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -132,7 +133,8 @@ namespace VmProjectBE.Controllers.v2
                     ("lastName", lastName),
                     ("email", email),
                     ("isAdmin", isAdmin),
-                    ("canvasToken", canvasToken));
+                    ("canvasToken", canvasToken),
+                    ("sectionId", sectionId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -161,6 +163,15 @@ namespace VmProjectBE.Controllers.v2
                                 return Ok(
                                     (from u in _context.Users
                                      where u.IsAdmin == isAdmin
+                                     select u).ToList());
+                            case "sectionId":
+                                return Ok(
+                                    (from u in _context.Users
+                                     join usr in _context.UserSectionRoles
+                                     on u.UserId equals usr.UserId
+                                     join s in _context.Sections
+                                     on usr.SectionId equals s.SectionId
+                                     where s.SectionId == sectionId
                                      select u).ToList());
                             default:
                                 return BadRequest("Invalid single parameter. Check documentation.");
