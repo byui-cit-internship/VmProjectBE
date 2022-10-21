@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20221020211105_User.cs")]
+    partial class Usercs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,16 +113,10 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("course_code")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("CourseName")
-                        .IsRequired()
-                        .HasColumnType("varchar(75)")
-                        .HasColumnName("course_name")
-                        .HasColumnOrder(3);
-
                     b.Property<int>("ResourceGroupId")
                         .HasColumnType("int")
                         .HasColumnName("resource_group_id")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(3);
 
                     b.HasKey("CourseId");
 
@@ -367,6 +363,12 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("folder_id")
                         .HasColumnOrder(4);
 
+                    b.Property<string>("LibraryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("library_id")
+                        .HasColumnOrder(9);
+
                     b.Property<int>("ResourceGroupId")
                         .HasColumnType("int")
                         .HasColumnName("resource_group_id")
@@ -376,6 +378,12 @@ namespace Database_VmProject.Migrations
                         .HasColumnType("int")
                         .HasColumnName("section_canvas_id")
                         .HasColumnOrder(7);
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("section_name")
+                        .HasColumnOrder(8);
 
                     b.Property<int>("SectionNumber")
                         .HasColumnType("int")
@@ -616,11 +624,6 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("last_name")
                         .HasColumnOrder(3);
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2(7)")
-                        .HasColumnName("verification_code_expiration")
-                        .HasColumnOrder(10);
-
                     b.Property<int>("VerificationCode")
                         .HasColumnType("int")
                         .HasColumnName("verification_code")
@@ -734,12 +737,17 @@ namespace Database_VmProject.Migrations
                     b.Property<DateTime>("VmInstanceExpireDate")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("vm_instance_expire_date")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(5);
 
                     b.Property<string>("VmInstanceVcenterId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("vm_instance_vcenter_id")
+                        .HasColumnOrder(4);
+
+                    b.Property<string>("VmInstanceVcenterName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("vm_instance_vcenter_name")
                         .HasColumnOrder(3);
 
                     b.Property<int>("VmTemplateId")
