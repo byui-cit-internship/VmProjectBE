@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20221020212224_Timestamp added")]
+    partial class Timestampadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -594,7 +596,7 @@ namespace Database_VmProject.Migrations
                         .HasColumnType("varchar(30)")
                         .HasColumnName("email")
                         .HasColumnOrder(4);
-                        
+
                     b.Property<byte>("EmailIsVerified")
                         .HasColumnType("tinyint")
                         .HasColumnName("email_is_verified")
@@ -628,7 +630,7 @@ namespace Database_VmProject.Migrations
                         .HasColumnOrder(10);
 
                     b.Property<int>("VerificationCode")
-                        .HasColumnType("int")
+                        .HasColumnType("int(5)")
                         .HasColumnName("verification_code")
                         .HasColumnOrder(9);
 
