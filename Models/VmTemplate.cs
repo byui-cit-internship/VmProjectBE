@@ -22,5 +22,10 @@ namespace VmProjectBE.Models
         [Required]
         [Column("vm_template_access_date", TypeName = "datetime2(7)", Order = 4)]
         public DateTime VmTemplateAccessDate { get; set; }
+
+        [Required]
+        [Column("library_id", Order = 5)]
+        public string LibraryId { get; set; }
+
     }
 }
