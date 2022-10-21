@@ -29,7 +29,7 @@ namespace VmProjectBE.Controllers.v2
 
         ****************************************/
         [HttpGet("")]
-        public async Task<ActionResult> GetVmTemplate(
+        public async Task<ActionResult> GetVmInstance(
             [FromQuery] int? vmInstanceId,
             [FromQuery] int? vmTemplateId,
             [FromQuery] string vmInstanceVcenterId,
@@ -39,9 +39,9 @@ namespace VmProjectBE.Controllers.v2
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
-            User professor = _auth.GetAdmin();
+            User user = _auth.GetUser();
 
-            if (isSystem || professor != null)
+            if (isSystem || user != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("vmInstanceId", vmInstanceId),
