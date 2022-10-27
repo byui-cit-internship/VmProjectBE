@@ -41,6 +41,6 @@ namespace VmProjectBE.Models
         public int VerificationCode { get; set; }
 
         [Column("verification_code_expiration", TypeName = "datetime2(7)", Order = 10)]
-        public DateTime StartDate { get; set; }
+        public DateTime VerificationCodeExpiration { get; set; }
     }
 }
