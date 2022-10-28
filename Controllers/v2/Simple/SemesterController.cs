@@ -34,7 +34,8 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? semesterYear,
             [FromQuery] string semesterTerm,
             [FromQuery] DateTime startDate,
-            [FromQuery] DateTime endDate)
+            [FromQuery] DateTime endDate,
+            [FromQuery] int? enrollmentTermId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -46,7 +47,8 @@ namespace VmProjectBE.Controllers.v2
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("semesterId", semesterId),
                     ("semesterYear", semesterYear),
-                    ("semesterTerm", semesterTerm));
+                    ("semesterTerm", semesterTerm),
+                    ("enrollmentTermId", enrollmentTermId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -66,6 +68,11 @@ namespace VmProjectBE.Controllers.v2
                                     (from s in _context.Semesters
                                      where s.SemesterId == semesterId
                                      select s).FirstOrDefault());
+                            case "enrollmentTermId":
+                                return Ok(
+                                    (from s in _context.Semesters
+                                     where s.EnrollmentTermId == enrollmentTermId
+                                     select s).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");
                         }
@@ -79,6 +86,22 @@ namespace VmProjectBE.Controllers.v2
                                     (from s in _context.Semesters
                                      where s.SemesterYear == semesterYear
                                      && s.SemesterTerm == semesterTerm
+                                     select s).FirstOrDefault());
+                            default:
+                                return BadRequest("Incorrect parameters entered");
+                        }
+                    case 3:
+                        switch (true)
+                        {
+                            case bool ifTrue when
+                                validParameters.Contains("semesterYear") &&
+                                validParameters.Contains("semesterTerm") &&
+                                validParameters.Contains("enrollmentTermId"):
+                                return Ok(
+                                    (from s in _context.Semesters
+                                     where s.SemesterYear == semesterYear
+                                     && s.SemesterTerm == semesterTerm
+                                     && s.EnrollmentTermId == enrollmentTermId
                                      select s).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");

@@ -26,5 +26,9 @@ namespace VmProjectBE.Models
         [Required]
         [Column("end_date", TypeName = "datetime2(7)", Order = 5)]
         public DateTime EndDate { get; set; }
+
+        [Required]
+        [Column("enrollment_term_id", Order = 6)]
+        public int EnrollmentTermId { get; set; }
     }
 }
