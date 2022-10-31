@@ -31,11 +31,11 @@ namespace VmProjectBE.Controllers.v2
         [HttpGet("")]
         public async Task<ActionResult> GetSemester(
             [FromQuery] int? semesterId,
+            [FromQuery] int? enrollmentTermCanvasId,
             [FromQuery] int? semesterYear,
             [FromQuery] string semesterTerm,
             [FromQuery] DateTime startDate,
-            [FromQuery] DateTime endDate,
-            [FromQuery] int? enrollmentTermId)
+            [FromQuery] DateTime endDate)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -46,9 +46,9 @@ namespace VmProjectBE.Controllers.v2
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("semesterId", semesterId),
+                    ("enrollmentTermCanvasId", enrollmentTermCanvasId),
                     ("semesterYear", semesterYear),
-                    ("semesterTerm", semesterTerm),
-                    ("enrollmentTermId", enrollmentTermId));
+                    ("semesterTerm", semesterTerm));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -68,10 +68,10 @@ namespace VmProjectBE.Controllers.v2
                                     (from s in _context.Semesters
                                      where s.SemesterId == semesterId
                                      select s).FirstOrDefault());
-                            case "enrollmentTermId":
+                            case "enrollmentTermCanvasId":
                                 return Ok(
                                     (from s in _context.Semesters
-                                     where s.EnrollmentTermId == enrollmentTermId
+                                     where s.EnrollmentTermCanvasId == enrollmentTermCanvasId
                                      select s).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");
@@ -96,12 +96,12 @@ namespace VmProjectBE.Controllers.v2
                             case bool ifTrue when
                                 validParameters.Contains("semesterYear") &&
                                 validParameters.Contains("semesterTerm") &&
-                                validParameters.Contains("enrollmentTermId"):
+                                validParameters.Contains("enrollmentTermCanvasId"):
                                 return Ok(
                                     (from s in _context.Semesters
                                      where s.SemesterYear == semesterYear
                                      && s.SemesterTerm == semesterTerm
-                                     && s.EnrollmentTermId == enrollmentTermId
+                                     && s.EnrollmentTermCanvasId == enrollmentTermCanvasId
                                      select s).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");

@@ -66,7 +66,7 @@ namespace VmProjectBE.Controllers.v1
                                               sem.SemesterTerm,
                                               usr.UserSectionRoleId,
                                               f.VcenterFolderId,
-                                              vt.LibraryId
+                                              vt.LibraryVCenterId
                                           )).ToList();
 
             return Ok(createVm);
