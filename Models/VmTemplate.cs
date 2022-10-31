@@ -24,8 +24,8 @@ namespace VmProjectBE.Models
         public DateTime VmTemplateAccessDate { get; set; }
 
         [Required]
-        [Column("library_id", Order = 5)]
-        public string LibraryId { get; set; }
+        [Column("library_vcenter_id", Order = 5)]
+        public string LibraryVCenterId { get; set; }
 
     }
 }

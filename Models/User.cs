@@ -30,12 +30,11 @@ namespace VmProjectBE.Models
         [Column("canvas_token", TypeName = "varchar(100)", Order = 6)]
         public string CanvasToken { get; set; }
 
-
         [Column("encrypted_canvas_token", TypeName = "varbinary(MAX)", Order = 7)]
-        public Byte[] EncryptedCanvasToken { get; set; }
+        public byte[] EncryptedCanvasToken { get; set; }
 
-        [Column("email_is_verified", TypeName = "tinyint", Order = 8)]
-        public bool EmailIsVerified { get; set; }
+        [Column("is_verified", TypeName = "bit", Order = 8)]
+        public bool IsVerified { get; set; }
 
         [Column("verification_code", TypeName = "int", Order = 9)]
         public int VerificationCode { get; set; }

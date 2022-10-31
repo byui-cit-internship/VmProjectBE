@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20221028172634_EnrollmentTermIdForSemester")]
+    partial class EnrollmentTermIdForSemester
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,11 +363,11 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("folder_id")
                         .HasColumnOrder(4);
 
-                    b.Property<string>("LibraryVCenterId")
+                    b.Property<string>("LibraryId")
                         .IsRequired()
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("library_vcenter_id")
-                        .HasColumnOrder(8);
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("library_id")
+                        .HasColumnOrder(9);
 
                     b.Property<int>("ResourceGroupId")
                         .HasColumnType("int")
@@ -375,18 +377,18 @@ namespace Database_VmProject.Migrations
                     b.Property<int>("SectionCanvasId")
                         .HasColumnType("int")
                         .HasColumnName("section_canvas_id")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("SectionName")
                         .IsRequired()
-                        .HasColumnType("varchar(200)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("section_name")
-                        .HasColumnOrder(7);
+                        .HasColumnOrder(8);
 
                     b.Property<int>("SectionNumber")
                         .HasColumnType("int")
                         .HasColumnName("section_number")
-                        .HasColumnOrder(9);
+                        .HasColumnOrder(6);
 
                     b.Property<int>("SemesterId")
                         .HasColumnType("int")
@@ -419,28 +421,28 @@ namespace Database_VmProject.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("end_date")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(5);
 
-                    b.Property<int>("EnrollmentTermCanvasId")
+                    b.Property<int>("EnrollmentTermId")
                         .HasColumnType("int")
-                        .HasColumnName("enrollment_term_canvas_id")
-                        .HasColumnOrder(2);
+                        .HasColumnName("enrollment_term_id")
+                        .HasColumnOrder(6);
 
                     b.Property<string>("SemesterTerm")
                         .IsRequired()
                         .HasColumnType("varchar(20)")
                         .HasColumnName("semester_term")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(3);
 
                     b.Property<int>("SemesterYear")
                         .HasColumnType("int")
                         .HasColumnName("semester_year")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(2);
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("start_date")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(4);
 
                     b.HasKey("SemesterId");
 
@@ -600,6 +602,11 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("email")
                         .HasColumnOrder(4);
 
+                    b.Property<byte>("EmailIsVerified")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("email_is_verified")
+                        .HasColumnOrder(8);
+
                     b.Property<byte[]>("EncryptedCanvasToken")
                         .HasColumnType("varbinary(MAX)")
                         .HasColumnName("encrypted_canvas_token")
@@ -616,26 +623,21 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("is_admin")
                         .HasColumnOrder(5);
 
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_verified")
-                        .HasColumnOrder(8);
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("varchar(20)")
                         .HasColumnName("last_name")
                         .HasColumnOrder(3);
 
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2(7)")
+                        .HasColumnName("verification_code_expiration")
+                        .HasColumnOrder(10);
+
                     b.Property<int>("VerificationCode")
                         .HasColumnType("int")
                         .HasColumnName("verification_code")
                         .HasColumnOrder(9);
-
-                    b.Property<DateTime>("VerificationCodeExpiration")
-                        .HasColumnType("datetime2(7)")
-                        .HasColumnName("verification_code_expiration")
-                        .HasColumnOrder(10);
 
                     b.HasKey("UserId");
 
@@ -867,10 +869,10 @@ namespace Database_VmProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VmTemplateId"), 1L, 1);
 
-                    b.Property<string>("LibraryVCenterId")
+                    b.Property<string>("LibraryId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("library_vcenter_id")
+                        .HasColumnName("library_id")
                         .HasColumnOrder(5);
 
                     b.Property<DateTime>("VmTemplateAccessDate")

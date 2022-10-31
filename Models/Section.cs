@@ -28,20 +28,21 @@ namespace VmProjectBE.Models
         public int ResourceGroupId { get; set; }
 
         [Required]
-        [Column("section_number", Order = 6)]
-        public int SectionNumber { get; set; }
-
-        [Required]
-        [Column("section_canvas_id", Order = 7)]
+        [Column("section_canvas_id", Order = 6)]
         public int SectionCanvasId { get; set; }
 
         [Required]
-        [Column("section_name", Order = 8)]
+        [Column("section_name", TypeName = "varchar(200)", Order = 7)]
         public string SectionName { get; set; }
 
         [Required]
-        [Column("library_id", Order = 9)]
-        public string LibraryId { get; set; }
+        [Column("library_vcenter_id", TypeName = "varchar(200)", Order = 8)]
+        public string LibraryVCenterId { get; set; }
+
+        [Required]
+        [Column("section_number", Order = 9)]
+        public int SectionNumber { get; set; }
+
 
         [ForeignKey("CourseId")]
         public Course Course { get; set; }
