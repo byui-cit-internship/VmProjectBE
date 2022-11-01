@@ -41,5 +41,11 @@ namespace VmProjectBE.Models
 
         [Column("verification_code_expiration", TypeName = "datetime2(7)", Order = 10)]
         public DateTime VerificationCodeExpiration { get; set; }
+
+        [Column("role", TypeName = "varchar(15)", Order = 11)]
+        public string role { get; set; }
+
+        [Column("approve_status", TypeName = "varchar(15)", Order = 12)]
+        public string approveStatus { get; set; }
     }
 }
