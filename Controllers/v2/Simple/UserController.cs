@@ -118,7 +118,10 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] string email,
             [FromQuery] bool? isAdmin,
             [FromQuery] string canvasToken,
-            [FromQuery] int? sectionId)
+            [FromQuery] int? sectionId,
+            [FromQuery] string approveStatus,
+            [FromQuery] string role
+            )
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -134,7 +137,9 @@ namespace VmProjectBE.Controllers.v2
                     ("email", email),
                     ("isAdmin", isAdmin),
                     ("canvasToken", canvasToken),
-                    ("sectionId", sectionId));
+                    ("sectionId", sectionId),
+                    ("approveStatus", approveStatus),
+                    ("role", role));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -163,6 +168,16 @@ namespace VmProjectBE.Controllers.v2
                                 return Ok(
                                     (from u in _context.Users
                                      where u.IsAdmin == isAdmin
+                                     select u).ToList());
+                            case "approveStatus":
+                                return Ok(
+                                    (from u in _context.Users
+                                     where u.approveStatus == approveStatus
+                                     select u).ToList());
+                            case "role":
+                                return Ok(
+                                    (from u in _context.Users
+                                     where u.role == role
                                      select u).ToList());
                             case "sectionId":
                                 return Ok(
