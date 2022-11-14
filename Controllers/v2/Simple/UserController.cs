@@ -275,26 +275,48 @@ namespace VmProjectBE.Controllers.v2
 
         ****************************************/
         [HttpPut("")]
-        public async Task<ActionResult> PutUser([FromBody] User user)
+        public async Task<ActionResult> PutUser([FromBody] User editedUser)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
             User professor = _auth.GetAdmin();
+            User user = _auth.GetUser();
 
-            if (isSystem || professor != null)
+            bool proceed = false;
+            if (isSystem)
+            {
+                proceed = true;
+            }
+            else if (professor is not null)
+            {
+                proceed = true;
+            }
+            else if (user is not null)
+            {
+                if (user.UserId == editedUser.UserId
+                || user.Email == editedUser.Email
+                || user.IsAdmin == editedUser.IsAdmin
+                || user.approveStatus == editedUser.approveStatus
+                || user.role == editedUser.role)
+                {
+                    proceed = true;
+                }
+            }
+
+            if (proceed)
             {
                 try
                 {
-                    User toModify = _context.Users.Find(user.UserId);
-                    PropertyInfo[] userProperties = user.GetType().GetProperties();
+                    User toModify = _context.Users.Find(editedUser.UserId);
+                    PropertyInfo[] userProperties = editedUser.GetType().GetProperties();
                     foreach (PropertyInfo property in userProperties)
                     {
-                        property.SetValue(toModify, property.GetValue(user));
+                        property.SetValue(toModify, property.GetValue(editedUser));
                     }
                     _context.Users.Update(toModify);
                     _context.SaveChanges();
-                    return Ok(user);
+                    return Ok(editedUser);
                 }
                 catch (Exception ex)
                 {
