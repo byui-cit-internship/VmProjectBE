@@ -66,6 +66,7 @@ namespace VmProjectBE.Controllers
                         user.FirstName = googleUser.given_name;
                         user.LastName = googleUser.family_name;
                         user.IsAdmin = false;
+                        user.approveStatus = "n/a";
 
                         _context.Users.Add(user); ;
                         _context.SaveChanges();
