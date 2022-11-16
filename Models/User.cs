@@ -33,15 +33,6 @@ namespace VmProjectBE.Models
         [Column("encrypted_canvas_token", TypeName = "varbinary(MAX)", Order = 7)]
         public byte[] EncryptedCanvasToken { get; set; }
 
-        [Column("is_verified", TypeName = "bit", Order = 8)]
-        public bool IsVerified { get; set; }
-
-        [Column("verification_code", TypeName = "int", Order = 9)]
-        public int VerificationCode { get; set; }
-
-        [Column("verification_code_expiration", TypeName = "datetime2(7)", Order = 10)]
-        public DateTime VerificationCodeExpiration { get; set; }
-
         [Column("role", TypeName = "varchar(15)", Order = 11)]
         public string role { get; set; }
 
