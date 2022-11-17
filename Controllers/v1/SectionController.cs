@@ -61,7 +61,8 @@ namespace VmProjectBE.Controllers.v1
                                                     sec.SectionId,
                                                     sem.SemesterTerm,
                                                     sec.SectionNumber,
-                                                    $"{u.FirstName} {u.LastName}"
+                                                    $"{u.FirstName} {u.LastName}",
+                                                    sec.LibraryVCenterId
                                                 )).ToList();
 
                 return Ok(sectionList);
