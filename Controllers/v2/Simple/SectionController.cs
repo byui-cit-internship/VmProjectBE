@@ -35,7 +35,7 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? courseId,
             [FromQuery] int? semesterId,
             [FromQuery] int? folderId,
-            [FromQuery] int? resourceGroupId,
+            [FromQuery] int? resourcePoolId,
             [FromQuery] string libraryId,
             [FromQuery] int? sectionNumber,
             [FromQuery] int? sectionCanvasId,
@@ -54,7 +54,7 @@ namespace VmProjectBE.Controllers.v2
                     ("courseId", courseId),
                     ("semesterId", semesterId),
                     ("folderId", folderId),
-                    ("resourceGroupId", resourceGroupId),
+                    ("resourcePoolId", resourcePoolId),
                     ("sectionNumber", sectionNumber),
                     ("sectionCanvasId", sectionCanvasId),
                     ("userId", userId));

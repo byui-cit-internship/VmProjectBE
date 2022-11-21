@@ -9,12 +9,12 @@ namespace VmProjectBE.Controllers.v2
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class ResourceGroupController : BeController
+    public class ResourcePoolController : BeController
     {
 
-        public ResourceGroupController(
+        public ResourcePoolController(
             IConfiguration configuration,
-            ILogger<ResourceGroupController> logger,
+            ILogger<ResourcePoolController> logger,
             IHttpContextAccessor httpContextAccessor,
             VmEntities context)
             : base(
@@ -29,9 +29,9 @@ namespace VmProjectBE.Controllers.v2
 
         ****************************************/
         [HttpGet("")]
-        public async Task<ActionResult> GetResourceGroup(
-            [FromQuery] int? resourceGroupId,
-            [FromQuery] string resourceGroupName,
+        public async Task<ActionResult> GetResourcePool(
+            [FromQuery] int? resourcePoolId,
+            [FromQuery] string resourcePoolName,
             [FromQuery] double? memory,
             [FromQuery] double? cpu)
         {
@@ -43,28 +43,28 @@ namespace VmProjectBE.Controllers.v2
             if (isSystem || professor != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
-                    ("resourceGroupId", resourceGroupId),
-                    ("resourceGroupName", resourceGroupName),
+                    ("resourcePoolId", resourcePoolId),
+                    ("resourcePoolName", resourcePoolName),
                     ("memory", memory),
                     ("cpu", cpu));
                 switch (validParameters.Count)
                 {
                     case 0:
                         return Ok(
-                            (from rg in _context.ResourceGroups
+                            (from rg in _context.ResourcePools
                              select rg).ToList());
                     case 1:
                         switch (validParameters[0])
                         {
-                            case "resourceGroupId":
+                            case "resourcePoolId":
                                 return Ok(
-                                    (from rg in _context.ResourceGroups
-                                     where rg.ResourceGroupId == resourceGroupId
+                                    (from rg in _context.ResourcePools
+                                     where rg.ResourcePoolId == resourcePoolId
                                      select rg).FirstOrDefault());
-                            case "resourceGroupName":
+                            case "resourcePoolName":
                                 return Ok(
-                                    (from rg in _context.ResourceGroups
-                                     where rg.ResourceGroupName == resourceGroupName
+                                    (from rg in _context.ResourcePools
+                                     where rg.ResourcePoolName == resourcePoolName
                                      select rg).ToList());
                             default:
                                 return BadRequest("Incorrect parameters entered");
@@ -75,12 +75,12 @@ namespace VmProjectBE.Controllers.v2
                             case bool ifTrue when
                             validParameters.Contains("memory") &&
                             validParameters.Contains("cpu") &&
-                            validParameters.Contains("resourceGroupName"):
+                            validParameters.Contains("resourcePoolName"):
                                 return Ok(
-                                    (from rg in _context.ResourceGroups
+                                    (from rg in _context.ResourcePools
                                      where rg.Memory.Equals(memory)
                                      && rg.Cpu.Equals(cpu)
-                                     && rg.ResourceGroupName == resourceGroupName
+                                     && rg.ResourcePoolName == resourcePoolName
                                      select rg).FirstOrDefault());
                             default:
                                 return BadRequest("Incorrect parameters entered");
@@ -100,7 +100,7 @@ namespace VmProjectBE.Controllers.v2
 
         ****************************************/
         [HttpPost("")]
-        public async Task<ActionResult> PostResourceGroup([FromBody] ResourceGroup resourceGroup)
+        public async Task<ActionResult> PostResourcePool([FromBody] ResourcePool resourcePool)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -111,9 +111,9 @@ namespace VmProjectBE.Controllers.v2
             {
                 try
                 {
-                    _context.ResourceGroups.Add(resourceGroup);
+                    _context.ResourcePools.Add(resourcePool);
                     _context.SaveChanges();
-                    return Ok(resourceGroup);
+                    return Ok(resourcePool);
                 }
                 catch (Exception ex)
                 {

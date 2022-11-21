@@ -32,7 +32,7 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> GetCourse(
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,
-            [FromQuery] int? resourceGroupTemplateId,
+            [FromQuery] int? resourcePoolTemplateId,
             [FromQuery] int? vmTemplateId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
@@ -45,7 +45,7 @@ namespace VmProjectBE.Controllers.v2
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("courseId", courseId),
                     ("courseCode", courseCode),
-                    ("resourceGroupTemplateId", resourceGroupTemplateId),
+                    ("resourcePoolTemplateId", resourcePoolTemplateId),
                     ("vmTemplateId", vmTemplateId));
                 switch (validParameters.Count)
                 {

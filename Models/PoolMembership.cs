@@ -5,15 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace VmProjectBE.Models
 {
     [Table("group_membership", Schema = "VmProjectBE")]
-    public class GroupMembership
+    public class PoolMembership
     {
         [Key]
         [Column("group_membership_id", Order = 1)]
-        public int GroupMembershipId { get; set; }
+        public int PoolMembershipId { get; set; }
 
         [Required]
         [Column("group_id", Order = 2)]
-        public int GroupId { get; set; }
+        public int PoolId { get; set; }
 
         [Required]
         [Column("user_id", Order = 3)]
@@ -21,7 +21,7 @@ namespace VmProjectBE.Models
 
 
         [ForeignKey("GroupId")]
-        public Group Group { get; set; }
+        public Pool Pool { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }

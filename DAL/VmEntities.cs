@@ -26,10 +26,10 @@ namespace VmProjectBE.DAL
         public DbSet<Course> Courses { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<FolderUser> FolderUsers { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupMembership> GroupMemberships { get; set; }
+        public DbSet<Pool> Pools { get; set; }
+        public DbSet<PoolMembership> PoolMemberships { get; set; }
         public DbSet<IpAddress> IpAddresses { get; set; }
-        public DbSet<ResourceGroup> ResourceGroups { get; set; }
+        public DbSet<ResourcePool> ResourcePools { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Semester> Semesters { get; set; }
