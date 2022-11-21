@@ -23,7 +23,7 @@ namespace Database_VmProject.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
+            
             modelBuilder.Entity("VmProjectBE.Models.AccessToken", b =>
                 {
                     b.Property<int>("AccessTokenId")

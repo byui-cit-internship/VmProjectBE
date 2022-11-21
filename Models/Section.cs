@@ -25,7 +25,7 @@ namespace VmProjectBE.Models
 
         [Required]
         [Column("resource_group_id", Order = 5)]
-        public int ResourceGroupId { get; set; }
+        public int ResourcePoolId { get; set; }
 
         [Required]
         [Column("section_canvas_id", Order = 6)]
@@ -53,7 +53,7 @@ namespace VmProjectBE.Models
         [ForeignKey("FolderId")]
         public Folder Folder { get; set; }
 
-        [ForeignKey("ResourceGroupId")]
-        public ResourceGroup ResourceGroup { get; set; }
+        [ForeignKey("ResourcePoolId")]
+        public ResourcePool ResourcePool { get; set; }
     }
 }

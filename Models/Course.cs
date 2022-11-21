@@ -17,10 +17,10 @@ namespace VmProjectBE.Models
 
         [Required]
         [Column("resource_group_id", Order = 3)]
-        public int ResourceGroupId { get; set; }
+        public int ResourcePoolId { get; set; }
 
 
-        [ForeignKey("ResourceGroupId")]
-        public ResourceGroup ResourceGroup { get; set; }
+        [ForeignKey("ResourcePoolId")]
+        public ResourcePool ResourcePool { get; set; }
     }
 }

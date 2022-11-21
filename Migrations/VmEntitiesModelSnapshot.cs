@@ -111,14 +111,14 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("course_code")
                         .HasColumnOrder(2);
 
-                    b.Property<int>("ResourceGroupId")
+                    b.Property<int>("ResourcePoolId")
                         .HasColumnType("int")
-                        .HasColumnName("resource_group_id")
+                        .HasColumnName("resource_pool_id")
                         .HasColumnOrder(3);
 
                     b.HasKey("CourseId");
 
-                    b.HasIndex("ResourceGroupId");
+                    b.HasIndex("ResourcePoolId");
 
                     b.ToTable("course", "VmProjectBE");
                 });
@@ -178,75 +178,6 @@ namespace Database_VmProject.Migrations
                     b.ToTable("folder_user", "VmProjectBE");
                 });
 
-            modelBuilder.Entity("VmProjectBE.Models.Group", b =>
-                {
-                    b.Property<int>("GroupId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("group_id")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupId"), 1L, 1);
-
-                    b.Property<int>("CanvasGroupId")
-                        .HasColumnType("int")
-                        .HasColumnName("canvas_group_id")
-                        .HasColumnOrder(2);
-
-                    b.Property<int>("FolderId")
-                        .HasColumnType("int")
-                        .HasColumnName("folder_id")
-                        .HasColumnOrder(5);
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("varchar(45)")
-                        .HasColumnName("group_name")
-                        .HasColumnOrder(3);
-
-                    b.Property<int>("SectionId")
-                        .HasColumnType("int")
-                        .HasColumnName("section_id")
-                        .HasColumnOrder(4);
-
-                    b.HasKey("GroupId");
-
-                    b.HasIndex("FolderId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("group", "VmProjectBE");
-                });
-
-            modelBuilder.Entity("VmProjectBE.Models.GroupMembership", b =>
-                {
-                    b.Property<int>("GroupMembershipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("group_membership_id")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupMembershipId"), 1L, 1);
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int")
-                        .HasColumnName("group_id")
-                        .HasColumnOrder(2);
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("user_id")
-                        .HasColumnOrder(3);
-
-                    b.HasKey("GroupMembershipId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("group_membership", "VmProjectBE");
-                });
-
             modelBuilder.Entity("VmProjectBE.Models.IpAddress", b =>
                 {
                     b.Property<int>("IpAddressId")
@@ -279,15 +210,84 @@ namespace Database_VmProject.Migrations
                     b.ToTable("ip_address", "VmProjectBE");
                 });
 
-            modelBuilder.Entity("VmProjectBE.Models.ResourceGroup", b =>
+            modelBuilder.Entity("VmProjectBE.Models.Pool", b =>
                 {
-                    b.Property<int>("ResourceGroupId")
+                    b.Property<int>("PoolId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("resource_group_id")
+                        .HasColumnName("pool_id")
                         .HasColumnOrder(1);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResourceGroupId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PoolId"), 1L, 1);
+
+                    b.Property<int>("CanvasPoolId")
+                        .HasColumnType("int")
+                        .HasColumnName("canvas_pool_id")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("FolderId")
+                        .HasColumnType("int")
+                        .HasColumnName("folder_id")
+                        .HasColumnOrder(5);
+
+                    b.Property<string>("PoolName")
+                        .IsRequired()
+                        .HasColumnType("varchar(45)")
+                        .HasColumnName("pool_name")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("SectionId")
+                        .HasColumnType("int")
+                        .HasColumnName("section_id")
+                        .HasColumnOrder(4);
+
+                    b.HasKey("PoolId");
+
+                    b.HasIndex("FolderId");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("pool", "VmProjectBE");
+                });
+
+            modelBuilder.Entity("VmProjectBE.Models.PoolMembership", b =>
+                {
+                    b.Property<int>("PoolMembershipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("pool_membership_id")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PoolMembershipId"), 1L, 1);
+
+                    b.Property<int>("PoolId")
+                        .HasColumnType("int")
+                        .HasColumnName("pool_id")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id")
+                        .HasColumnOrder(3);
+
+                    b.HasKey("PoolMembershipId");
+
+                    b.HasIndex("PoolId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("pool_membership", "VmProjectBE");
+                });
+
+            modelBuilder.Entity("VmProjectBE.Models.ResourcePool", b =>
+                {
+                    b.Property<int>("ResourcePoolId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("resource_pool_id")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResourcePoolId"), 1L, 1);
 
                     b.Property<double>("Cpu")
                         .HasColumnType("float")
@@ -299,20 +299,20 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("memory")
                         .HasColumnOrder(4);
 
-                    b.Property<string>("ResourceGroupName")
+                    b.Property<string>("ResourcePoolName")
                         .IsRequired()
                         .HasColumnType("varchar(20)")
-                        .HasColumnName("resource_group_name")
+                        .HasColumnName("resource_pool_name")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("ResourceGroupVsphereId")
+                    b.Property<string>("ResourcePoolVsphereId")
                         .HasColumnType("varchar(15)")
-                        .HasColumnName("resource_group_vsphere_id")
+                        .HasColumnName("resource_pool_vsphere_id")
                         .HasColumnOrder(3);
 
-                    b.HasKey("ResourceGroupId");
+                    b.HasKey("ResourcePoolId");
 
-                    b.ToTable("resource_group", "VmProjectBE");
+                    b.ToTable("resource_pool", "VmProjectBE");
                 });
 
             modelBuilder.Entity("VmProjectBE.Models.Role", b =>
@@ -367,9 +367,9 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("library_vcenter_id")
                         .HasColumnOrder(8);
 
-                    b.Property<int>("ResourceGroupId")
+                    b.Property<int>("ResourcePoolId")
                         .HasColumnType("int")
-                        .HasColumnName("resource_group_id")
+                        .HasColumnName("resource_pool_id")
                         .HasColumnOrder(5);
 
                     b.Property<int>("SectionCanvasId")
@@ -399,7 +399,7 @@ namespace Database_VmProject.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.HasIndex("ResourceGroupId");
+                    b.HasIndex("ResourcePoolId");
 
                     b.HasIndex("SemesterId");
 
@@ -999,13 +999,13 @@ namespace Database_VmProject.Migrations
 
             modelBuilder.Entity("VmProjectBE.Models.Course", b =>
                 {
-                    b.HasOne("VmProjectBE.Models.ResourceGroup", "ResourceGroup")
+                    b.HasOne("VmProjectBE.Models.ResourcePool", "ResourcePool")
                         .WithMany()
-                        .HasForeignKey("ResourceGroupId")
+                        .HasForeignKey("ResourcePoolId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ResourceGroup");
+                    b.Navigation("ResourcePool");
                 });
 
             modelBuilder.Entity("VmProjectBE.Models.FolderUser", b =>
@@ -1027,7 +1027,7 @@ namespace Database_VmProject.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("VmProjectBE.Models.Group", b =>
+            modelBuilder.Entity("VmProjectBE.Models.Pool", b =>
                 {
                     b.HasOne("VmProjectBE.Models.Folder", "Folder")
                         .WithMany()
@@ -1046,11 +1046,11 @@ namespace Database_VmProject.Migrations
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("VmProjectBE.Models.GroupMembership", b =>
+            modelBuilder.Entity("VmProjectBE.Models.PoolMembership", b =>
                 {
-                    b.HasOne("VmProjectBE.Models.Group", "Group")
+                    b.HasOne("VmProjectBE.Models.Pool", "Pool")
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("PoolId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1060,7 +1060,7 @@ namespace Database_VmProject.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("Pool");
 
                     b.Navigation("User");
                 });
@@ -1079,9 +1079,9 @@ namespace Database_VmProject.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VmProjectBE.Models.ResourceGroup", "ResourceGroup")
+                    b.HasOne("VmProjectBE.Models.ResourcePool", "ResourcePool")
                         .WithMany()
-                        .HasForeignKey("ResourceGroupId")
+                        .HasForeignKey("ResourcePoolId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1095,7 +1095,7 @@ namespace Database_VmProject.Migrations
 
                     b.Navigation("Folder");
 
-                    b.Navigation("ResourceGroup");
+                    b.Navigation("ResourcePool");
 
                     b.Navigation("Semester");
                 });

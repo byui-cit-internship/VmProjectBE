@@ -5,19 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace VmProjectBE.Models
 {
     [Table("group", Schema = "VmProjectBE")]
-    public class Group
+    public class Pool
     {
         [Key]
         [Column("group_id", Order = 1)]
-        public int GroupId { get; set; }
+        public int PoolId { get; set; }
 
         [Required]
         [Column("canvas_group_id", Order = 2)]
-        public int CanvasGroupId { get; set; }
+        public int CanvasPoolId { get; set; }
 
         [Required]
         [Column("group_name", TypeName = "varchar(45)", Order = 3)]
-        public string GroupName { get; set; }
+        public string PoolName { get; set; }
 
         [Required]
         [Column("section_id", Order = 4)]
