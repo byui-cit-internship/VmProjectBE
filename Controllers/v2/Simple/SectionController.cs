@@ -39,6 +39,7 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] string libraryId,
             [FromQuery] int? sectionNumber,
             [FromQuery] int? sectionCanvasId,
+            [FromQuery] int? userSectionRoleId,
             [FromQuery] int? userId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
@@ -57,6 +58,7 @@ namespace VmProjectBE.Controllers.v2
                     ("resourcePoolId", resourcePoolId),
                     ("sectionNumber", sectionNumber),
                     ("sectionCanvasId", sectionCanvasId),
+                    ("userSectionRoleId", userSectionRoleId),
                     ("userId", userId));
                 switch (validParameters.Count)
                 {
@@ -96,6 +98,13 @@ namespace VmProjectBE.Controllers.v2
                                 return Ok(
                                     (from s in _context.Sections
                                      where s.SectionCanvasId == sectionCanvasId
+                                     select s).FirstOrDefault());
+                            case "userSectionRoleId":
+                                return Ok(
+                                    (from s in _context.Sections
+                                     join usr in _context.UserSectionRoles
+                                     on s.SectionId equals usr.SectionId
+                                     where usr.UserSectionRoleId == userSectionRoleId
                                      select s).FirstOrDefault());
                             case "userId":
                                 return Ok(
