@@ -16,8 +16,8 @@ spec:
       containers:
       - name: vm-project-be-prod
         env:
-        - name: APSNETCORE_ENVIRONMENT
-          value: Development
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
         - name: DB_SERVER
           valueFrom:
             secretKeyRef:

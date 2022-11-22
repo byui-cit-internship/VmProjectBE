@@ -16,7 +16,7 @@ spec:
       containers:
       - name: vm-project-be-dev
         env:
-        - name: APSNETCORE_ENVIRONMENT
+        - name: ASPNETCORE_ENVIRONMENT
           value: Development
         - name: DB_SERVER
           valueFrom:
