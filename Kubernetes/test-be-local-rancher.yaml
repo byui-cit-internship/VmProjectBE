@@ -16,8 +16,8 @@ spec:
       containers:
       - name: vm-project-be-test
         env:
-        - name: APSNETCORE_ENVIRONMENT
-          value: Development
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Test
         - name: DB_SERVER
           valueFrom:
             secretKeyRef:
