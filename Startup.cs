@@ -20,6 +20,7 @@ namespace VmProjectBE
 
             Configuration = builder.Build();
             Environment = env;
+            Console.WriteLine(env.EnvironmentName);
             MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         }
 
