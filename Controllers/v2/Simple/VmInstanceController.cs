@@ -34,6 +34,7 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? vmTemplateId,
             [FromQuery] string vmInstanceVcenterId,
             [FromQuery] DateTime? vmInstanceExpireDate,
+            [FromQuery] string vmInstanceVcenterName,
             [FromQuery] int? userId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
@@ -48,6 +49,7 @@ namespace VmProjectBE.Controllers.v2
                     ("vmTemplateId", vmTemplateId),
                     ("vmInstanceVcenterId", vmInstanceVcenterId),
                     ("vmInstanceExpireDate", vmInstanceExpireDate),
+                    ("vmInstanceVcenterName", vmInstanceVcenterName),
                     ("userId", userId));
                 switch (validParameters.Count)
                 {
@@ -72,6 +74,11 @@ namespace VmProjectBE.Controllers.v2
                                 return Ok(
                                     (from vi in _context.VmInstances
                                      where vi.VmInstanceVcenterId == vmInstanceVcenterId
+                                     select vi).FirstOrDefault());
+                            case "vmInstanceVcenterName":
+                                return Ok(
+                                    (from vi in _context.VmInstances
+                                     where vi.VmInstanceVcenterName == vmInstanceVcenterName
                                      select vi).FirstOrDefault());
                             case "userId":
                                 return Ok(

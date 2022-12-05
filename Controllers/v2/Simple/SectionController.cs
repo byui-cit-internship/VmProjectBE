@@ -45,9 +45,9 @@ namespace VmProjectBE.Controllers.v2
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
-            User professor = _auth.GetAdmin();
+            User user = _auth.GetUser();
 
-            if (isSystem || professor != null)
+            if (isSystem || user != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("sectionId", sectionId),

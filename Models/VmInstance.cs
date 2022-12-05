@@ -15,7 +15,7 @@ namespace VmProjectBE.Models
         [Column("vm_template_id", Order = 2)]
         public int VmTemplateId { get; set; }
 
-
+        [Required]
         [Column("vm_instance_vcenter_name", Order = 3)]
         public string VmInstanceVcenterName {get; set;}
 
