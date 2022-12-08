@@ -24,11 +24,19 @@ namespace VmProjectBE.Models
         public string VmInstanceVcenterId { get; set; }
 
         [Required]
-        [Column("vm_instance_expire_date", TypeName = "datetime2(7)", Order = 5)]
+        [Column("vm_instance_create_date", TypeName = "datetime2(7)", Order = 5)]
+        public DateTime VmInstanceCreationDate { get; set; }
+
+        [Required]
+        [Column("vm_instance_expire_date", TypeName = "datetime2(7)", Order = 6)]
         public DateTime VmInstanceExpireDate { get; set; }
 
 
         [ForeignKey("VmTemplateId")]
         public VmTemplate VmTemplate { get; set; }
+
+        [Required]
+        [Column("SectionId")]
+        public int SectionId { get; set; }
     }
 }
