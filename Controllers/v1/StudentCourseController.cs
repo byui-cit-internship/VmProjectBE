@@ -61,6 +61,7 @@ namespace VmProjectBE.Controllers.v1
                                                         && u.UserId == queryUserId
                                                         select new CourseListByUserDTO(
                                                            s.SectionCanvasId,
+                                                           s.SectionId,
                                                            s.SectionName,
                                                            usr.UserSectionRoleId,
                                                            $"{u.FirstName} {u.LastName}",
