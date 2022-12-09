@@ -33,7 +33,8 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? vmTemplateId,
             [FromQuery] string vmTemplateVcenterId,
             [FromQuery] string vmTemplateName,
-            [FromQuery] DateTime? vmTemplateAccessDate)
+            [FromQuery] DateTime? vmTemplateAccessDate,
+            [FromQuery] string libraryVCenterId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -46,7 +47,8 @@ namespace VmProjectBE.Controllers.v2
                     ("vmTemplateId", vmTemplateId),
                     ("vmTemplateVcenterId", vmTemplateVcenterId),
                     ("vmTemplateName", vmTemplateName),
-                    ("vmTemplateAccessDate", vmTemplateAccessDate));
+                    ("vmTemplateAccessDate", vmTemplateAccessDate),
+                    ("libraryVCenterId", libraryVCenterId));
                 switch (validParameters.Count)
                 {
                     case 0:
@@ -71,6 +73,11 @@ namespace VmProjectBE.Controllers.v2
                                     (from vt in _context.VmTemplates
                                      where vt.VmTemplateName == vmTemplateName
                                      select vt).FirstOrDefault());
+                            case "libraryVCenterId":
+                                return Ok(
+                                    (from vt in _context.VmTemplates
+                                     where vt.LibraryVCenterId == libraryVCenterId
+                                     select vt).ToList());
                             default:
                                 return BadRequest("Invalid single parameter. Check documentation.");
                         }
