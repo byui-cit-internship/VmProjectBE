@@ -34,8 +34,10 @@ namespace VmProjectBE.Controllers.v1
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
             // Returns a professor user or null if email is not associated with a professor
+            
+            User professor = _auth.GetAdmin();
 
-            if (isSystem)
+            if (isSystem || professor != null)
             {
                 // Returns a list of course name, section id, semester, section number, and professor
                 // based on the professor and semester variables
