@@ -66,7 +66,7 @@ namespace VmProjectBE.Controllers.v1
                                                            usr.UserSectionRoleId,
                                                            $"{u.FirstName} {u.LastName}",
                                                            tc.TagCategoryVcenterId
-                                                        )).ToList();
+                                                        )).Distinct().ToList();
 
                 return Ok(courseList);
             }
