@@ -40,6 +40,7 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? sectionNumber,
             [FromQuery] int? sectionCanvasId,
             [FromQuery] int? userSectionRoleId,
+            // [FromQuery] int? enrollmentId,
             [FromQuery] int? userId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
@@ -59,6 +60,7 @@ namespace VmProjectBE.Controllers.v2
                     ("sectionNumber", sectionNumber),
                     ("sectionCanvasId", sectionCanvasId),
                     ("userSectionRoleId", userSectionRoleId),
+                    // ("enrollmentId", enrollmentId),
                     ("userId", userId));
                 switch (validParameters.Count)
                 {
@@ -72,8 +74,11 @@ namespace VmProjectBE.Controllers.v2
                             case "sectionId":
                                 return Ok(
                                     (from s in _context.Sections
-                                     where s.SectionId == sectionId
-                                     select s).FirstOrDefault());
+                                    join course in _context.Courses
+                                    on s.CourseId equals course.CourseId
+                                    where s.SectionId == sectionId
+                                    select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId}).FirstOrDefault());
+                                      
                             case "courseId":
                                 return Ok(
                                     (from s in _context.Sections
@@ -82,7 +87,7 @@ namespace VmProjectBE.Controllers.v2
                             case "semesterId":
                                 return Ok(
                                     (from s in _context.Sections
-                                     where s.CourseId == courseId
+                                     where s.SemesterId == semesterId
                                      select s).ToList());
                             case "folderId":
                                 return Ok(
@@ -111,8 +116,10 @@ namespace VmProjectBE.Controllers.v2
                                     (from s in _context.Sections
                                      join usr in _context.UserSectionRoles
                                      on s.SectionId equals usr.SectionId
+                                     join course in _context.Courses
+                                     on s.CourseId equals course.CourseId
                                      where usr.UserId == userId
-                                     select s).ToList());
+                                     select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId}).ToList());
                             default:
                                 return BadRequest("How did you get here?");
                         }
