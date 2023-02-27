@@ -38,5 +38,10 @@ namespace VmProjectBE.Models
         [Required]
         [Column("SectionId")]
         public int SectionId { get; set; }
+
+
+        /*Added a new column so TagUser could eventually be deleted. Required was was not added incase the code freaks out*/
+        [Column("UserId")]
+        public int UserId{get; set;}
     }
 }
