@@ -19,10 +19,6 @@ namespace VmProjectBE.Models
         [Column("vswitch_id", Order = 3)]
         public int VswitchId { get; set; }
 
-
-        [ForeignKey("TagId")]
-        public Tag Tag { get; set; }
-
         [ForeignKey("VswitchId")]
         public Vswitch Vswitch { get; set; }
     }

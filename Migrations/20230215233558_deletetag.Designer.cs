@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20230215233558_deletetag")]
+    partial class deletetag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -744,10 +746,6 @@ namespace Database_VmProject.Migrations
                         .HasColumnType("int")
                         .HasColumnName("SectionId");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UserId");
-
                     b.Property<DateTime>("VmInstanceCreationDate")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("vm_instance_create_date")
@@ -984,6 +982,8 @@ namespace Database_VmProject.Migrations
                         .HasColumnOrder(3);
 
                     b.HasKey("VswitchTagId");
+
+                    b.HasIndex("TagId");
 
                     b.HasIndex("VswitchId");
 
@@ -1290,11 +1290,19 @@ namespace Database_VmProject.Migrations
 
             modelBuilder.Entity("VmProjectBE.Models.VswitchTag", b =>
                 {
+                    b.HasOne("VmProjectBE.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("VmProjectBE.Models.Vswitch", "Vswitch")
                         .WithMany()
                         .HasForeignKey("VswitchId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Tag");
 
                     b.Navigation("Vswitch");
                 });
