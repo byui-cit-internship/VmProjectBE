@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20230327175128_deleteModels")]
+    partial class deleteModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -553,6 +555,35 @@ namespace Database_VmProject.Migrations
                     b.ToTable("tag_category", "VmProjectBE");
                 });
 
+            modelBuilder.Entity("VmProjectBE.Models.TagUser", b =>
+                {
+                    b.Property<int>("TagUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("tag_user_id")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagUserId"), 1L, 1);
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int")
+                        .HasColumnName("tag_id")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id")
+                        .HasColumnOrder(3);
+
+                    b.HasKey("TagUserId");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("tag_user", "VmProjectBE");
+                });
+
             modelBuilder.Entity("VmProjectBE.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -741,9 +772,8 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("vm_instance_vcenter_name")
                         .HasColumnOrder(3);
 
-                    b.Property<string>("VmTemplateId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<int>("VmTemplateId")
+                        .HasColumnType("int")
                         .HasColumnName("vm_template_id")
                         .HasColumnOrder(2);
 
@@ -1037,6 +1067,25 @@ namespace Database_VmProject.Migrations
                         .IsRequired();
 
                     b.Navigation("TagCategory");
+                });
+
+            modelBuilder.Entity("VmProjectBE.Models.TagUser", b =>
+                {
+                    b.HasOne("VmProjectBE.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("VmProjectBE.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("VmProjectBE.Models.UserSectionRole", b =>

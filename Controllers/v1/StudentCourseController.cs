@@ -48,24 +48,14 @@ namespace VmProjectBE.Controllers.v1
                                                         on usr.SectionId equals s.SectionId
                                                         join c in _context.Courses
                                                         on s.CourseId equals c.CourseId
-                                                        join t in _context.Tags
-                                                        on c.CourseCode equals t.TagName
-                                                        join tc in _context.TagCategories
-                                                        on t.TagCategoryId equals tc.TagCategoryId
-                                                        join vtt in _context.VmTemplateTags
-                                                        on t.TagId equals vtt.TagId
-                                                        join vt in _context.VmTemplates
-                                                        on vtt.VmTemplateId equals vt.VmTemplateId
-                                                        where tc.TagCategoryName == "Course"
-                                                        && t.TagName == c.CourseCode
-                                                        && u.UserId == queryUserId
+
                                                         select new CourseListByUserDTO(
                                                            s.SectionCanvasId,
                                                            s.SectionId,
                                                            s.SectionName,
                                                            usr.UserSectionRoleId,
-                                                           $"{u.FirstName} {u.LastName}",
-                                                           tc.TagCategoryVcenterId
+                                                           $"{u.FirstName} {u.LastName}"
+
                                                         )).Distinct().ToList();
 
                 return Ok(courseList);

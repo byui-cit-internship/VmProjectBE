@@ -45,8 +45,6 @@ namespace VmProjectBE.DAL
         public DbSet<VmInstanceIpAddress> VmInstanceIpAddresses { get; set; }
         public DbSet<VmInstanceTag> VmInstanceTags { get; set; }
         public DbSet<VmInstanceVswitch> VmInstanceVswitches { get; set; }
-        public DbSet<VmTemplate> VmTemplates { get; set; }
-        public DbSet<VmTemplateTag> VmTemplateTags { get; set; }
         public DbSet<Vswitch> Vswitches { get; set; }
         public DbSet<VswitchTag> VswitchTags { get; set; }
 

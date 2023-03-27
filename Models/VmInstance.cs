@@ -31,10 +31,6 @@ namespace VmProjectBE.Models
         [Column("vm_instance_expire_date", TypeName = "datetime2(7)", Order = 6)]
         public DateTime VmInstanceExpireDate { get; set; }
 
-
-        [ForeignKey("VmTemplateId")]
-        public VmTemplate VmTemplate { get; set; }
-
         [Required]
         [Column("SectionId")]
         public int SectionId { get; set; }
