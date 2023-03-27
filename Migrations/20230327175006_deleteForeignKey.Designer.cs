@@ -12,8 +12,8 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    [Migration("20230327173345_remove_template_table")]
-    partial class remove_template_table
+    [Migration("20230327175006_deleteForeignKey")]
+    partial class deleteForeignKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
