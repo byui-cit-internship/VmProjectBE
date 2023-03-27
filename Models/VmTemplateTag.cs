@@ -17,7 +17,7 @@ namespace VmProjectBE.Models
 
         [Required]
         [Column("vm_template_id", Order = 3)]
-        public int VmTemplateId { get; set; }
+        public string VmTemplateId { get; set; }
 
 
         [ForeignKey("TagId")]

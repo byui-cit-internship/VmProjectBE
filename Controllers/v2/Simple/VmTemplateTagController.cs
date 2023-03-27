@@ -32,7 +32,7 @@ namespace VmProjectBE.Controllers.v2
         public async Task<ActionResult> GetVmTemplateTag(
             [FromQuery] int? vmTemplateTagId,
             [FromQuery] int? tagId,
-            [FromQuery] int? vmTemplateId)
+            [FromQuery] string vmTemplateId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;

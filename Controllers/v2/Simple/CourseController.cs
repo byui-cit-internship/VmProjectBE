@@ -33,7 +33,7 @@ namespace VmProjectBE.Controllers.v2
             [FromQuery] int? courseId,
             [FromQuery] string courseCode,
             [FromQuery] int? resourcePoolTemplateId,
-            [FromQuery] int? vmTemplateId)
+            [FromQuery] string vmTemplateId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;

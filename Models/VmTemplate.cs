@@ -9,7 +9,7 @@ namespace VmProjectBE.Models
     {
         [Key]
         [Column("vm_template_id", Order = 1)]
-        public int VmTemplateId { get; set; }
+        public string VmTemplateId { get; set; }
 
         [Required]
         [Column("vm_template_vcenter_id", TypeName = "varchar(50)", Order = 2)]

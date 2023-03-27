@@ -31,7 +31,7 @@ namespace VmProjectBE.Controllers.v2
         [HttpGet("")]
         public async Task<ActionResult> GetVmInstance(
             [FromQuery] int? vmInstanceId,
-            [FromQuery] int? vmTemplateId,
+            [FromQuery] string vmTemplateId,
             [FromQuery] string vmInstanceVcenterId,
             [FromQuery] DateTime? vmInstanceExpireDate,
             [FromQuery] string vmInstanceVcenterName,

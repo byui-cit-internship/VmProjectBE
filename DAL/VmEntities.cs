@@ -36,7 +36,7 @@ namespace VmProjectBE.DAL
         public DbSet<SessionToken> SessionTokens { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TagCategory> TagCategories { get; set; }
-        public DbSet<TagUser> TagUsers { get; set; }
+        // public DbSet<TagUser> TagUsers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSectionRole> UserSectionRoles { get; set; }
         public DbSet<Vlan> Vlans { get; set; }

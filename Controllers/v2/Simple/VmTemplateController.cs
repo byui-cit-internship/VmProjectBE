@@ -30,7 +30,7 @@ namespace VmProjectBE.Controllers.v2
         ****************************************/
         [HttpGet("")]
         public async Task<ActionResult> GetVmTemplate(
-            [FromQuery] int? vmTemplateId,
+            [FromQuery] string vmTemplateId,
             [FromQuery] string vmTemplateVcenterId,
             [FromQuery] string vmTemplateName,
             [FromQuery] DateTime? vmTemplateAccessDate,
