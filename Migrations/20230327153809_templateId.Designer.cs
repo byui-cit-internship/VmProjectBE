@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20230327153809_templateId")]
+    partial class templateId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -749,6 +751,8 @@ namespace Database_VmProject.Migrations
 
                     b.HasKey("VmInstanceId");
 
+                    b.HasIndex("VmTemplateId");
+
                     b.ToTable("vm_instance", "VmProjectBE");
                 });
 
@@ -837,6 +841,71 @@ namespace Database_VmProject.Migrations
                     b.HasIndex("VswitchId");
 
                     b.ToTable("vm_instance_vswitch", "VmProjectBE");
+                });
+
+            modelBuilder.Entity("VmProjectBE.Models.VmTemplate", b =>
+                {
+                    b.Property<string>("VmTemplateId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("vm_template_id")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("LibraryVCenterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("library_vcenter_id")
+                        .HasColumnOrder(5);
+
+                    b.Property<DateTime>("VmTemplateAccessDate")
+                        .HasColumnType("datetime2(7)")
+                        .HasColumnName("vm_template_access_date")
+                        .HasColumnOrder(4);
+
+                    b.Property<string>("VmTemplateName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("vm_template_name")
+                        .HasColumnOrder(3);
+
+                    b.Property<string>("VmTemplateVcenterId")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("vm_template_vcenter_id")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("VmTemplateId");
+
+                    b.ToTable("vm_template", "VmProjectBE");
+                });
+
+            modelBuilder.Entity("VmProjectBE.Models.VmTemplateTag", b =>
+                {
+                    b.Property<int>("VmTemplateTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("vm_template_tag_id")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VmTemplateTagId"), 1L, 1);
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int")
+                        .HasColumnName("tag_id")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("VmTemplateId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("vm_template_id")
+                        .HasColumnOrder(3);
+
+                    b.HasKey("VmTemplateTagId");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("VmTemplateId");
+
+                    b.ToTable("vm_template_tag", "VmProjectBE");
                 });
 
             modelBuilder.Entity("VmProjectBE.Models.Vswitch", b =>
@@ -1085,6 +1154,17 @@ namespace Database_VmProject.Migrations
                     b.Navigation("Vswitch");
                 });
 
+            modelBuilder.Entity("VmProjectBE.Models.VmInstance", b =>
+                {
+                    b.HasOne("VmProjectBE.Models.VmTemplate", "VmTemplate")
+                        .WithMany()
+                        .HasForeignKey("VmTemplateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("VmTemplate");
+                });
+
             modelBuilder.Entity("VmProjectBE.Models.VmInstanceIpAddress", b =>
                 {
                     b.HasOne("VmProjectBE.Models.IpAddress", "IpAddress")
@@ -1140,6 +1220,25 @@ namespace Database_VmProject.Migrations
                     b.Navigation("VmInstance");
 
                     b.Navigation("Vswitch");
+                });
+
+            modelBuilder.Entity("VmProjectBE.Models.VmTemplateTag", b =>
+                {
+                    b.HasOne("VmProjectBE.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("VmProjectBE.Models.VmTemplate", "VmTemplate")
+                        .WithMany()
+                        .HasForeignKey("VmTemplateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("VmTemplate");
                 });
 
             modelBuilder.Entity("VmProjectBE.Models.VswitchTag", b =>

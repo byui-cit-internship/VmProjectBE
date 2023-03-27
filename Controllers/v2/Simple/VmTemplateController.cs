@@ -9,12 +9,12 @@ namespace VmProjectBE.Controllers.v2
     [Authorize]
     [Route("api/v2/[controller]")]
     [ApiController]
-    public class CourseController : BeController
+    public class VmTemplateController : BeController
     {
 
-        public CourseController(
+        public VmTemplateController(
             IConfiguration configuration,
-            ILogger<CourseController> logger,
+            ILogger<VmTemplateController> logger,
             IHttpContextAccessor httpContextAccessor,
             VmEntities context)
             : base(
@@ -29,11 +29,12 @@ namespace VmProjectBE.Controllers.v2
 
         ****************************************/
         [HttpGet("")]
-        public async Task<ActionResult> GetCourse(
-            [FromQuery] int? courseId,
-            [FromQuery] string courseCode,
-            [FromQuery] int? resourcePoolTemplateId,
-            [FromQuery] string vmTemplateId)
+        public async Task<ActionResult> GetVmTemplate(
+            [FromQuery] string vmTemplateId,
+            [FromQuery] string vmTemplateVcenterId,
+            [FromQuery] string vmTemplateName,
+            [FromQuery] DateTime? vmTemplateAccessDate,
+            [FromQuery] string libraryVCenterId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -43,31 +44,42 @@ namespace VmProjectBE.Controllers.v2
             if (isSystem || user != null)
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
-                    ("courseId", courseId),
-                    ("courseCode", courseCode),
-                    ("resourcePoolTemplateId", resourcePoolTemplateId),
-                    ("vmTemplateId", vmTemplateId));
+                    ("vmTemplateId", vmTemplateId),
+                    ("vmTemplateVcenterId", vmTemplateVcenterId),
+                    ("vmTemplateName", vmTemplateName),
+                    ("vmTemplateAccessDate", vmTemplateAccessDate),
+                    ("libraryVCenterId", libraryVCenterId));
                 switch (validParameters.Count)
                 {
                     case 0:
                         return Ok(
-                            (from c in _context.Courses
-                             select c).ToList());
+                            (from vt in _context.VmTemplates
+                             select vt).ToList());
                     case 1:
                         switch (validParameters[0])
                         {
-                            case "courseId":
+                            case "vmTemplateId":
                                 return Ok(
-                                    (from c in _context.Courses
-                                     where c.CourseId == courseId
-                                     select c).FirstOrDefault());
-                            case "courseCode":
+                                    (from vt in _context.VmTemplates
+                                     where vt.VmTemplateId == vmTemplateId
+                                     select vt).FirstOrDefault());
+                            case "vmTemplateVcenterId":
                                 return Ok(
-                                    (from c in _context.Courses
-                                     where c.CourseCode == courseCode
-                                     select c).FirstOrDefault());
+                                    (from vt in _context.VmTemplates
+                                     where vt.VmTemplateVcenterId == vmTemplateVcenterId
+                                     select vt).FirstOrDefault());
+                            case "vmTemplateName":
+                                return Ok(
+                                    (from vt in _context.VmTemplates
+                                     where vt.VmTemplateName == vmTemplateName
+                                     select vt).FirstOrDefault());
+                            case "libraryVCenterId":
+                                return Ok(
+                                    (from vt in _context.VmTemplates
+                                     where vt.LibraryVCenterId == libraryVCenterId
+                                     select vt).ToList());
                             default:
-                                return BadRequest("Incorrect parameters entered");
+                                return BadRequest("Invalid single parameter. Check documentation.");
                         }
                     default:
                         return BadRequest("Incorrect parameters entered");
@@ -83,20 +95,20 @@ namespace VmProjectBE.Controllers.v2
 
         ****************************************/
         [HttpPost("")]
-        public async Task<ActionResult> PostCourse([FromBody] Course course)
+        public async Task<ActionResult> PostVmTemplate([FromBody] VmTemplate vmTemplate)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
 
-            User user = _auth.GetUser();
+            User professor = _auth.GetAdmin();
 
-            if (isSystem || user != null)
+            if (isSystem || professor != null)
             {
                 try
                 {
-                    _context.Courses.Add(course);
+                    _context.VmTemplates.Add(vmTemplate);
                     _context.SaveChanges();
-                    return Ok(course);
+                    return Ok(vmTemplate);
                 }
                 catch (Exception ex)
                 {

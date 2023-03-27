@@ -13,7 +13,7 @@ namespace VmProjectBE.Models
 
         [Required]
         [Column("vm_template_id", Order = 2)]
-        public int VmTemplateId { get; set; }
+        public string VmTemplateId { get; set; }
 
         [Required]
         [Column("vm_instance_vcenter_name", Order = 3)]
