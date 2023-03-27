@@ -48,25 +48,17 @@ namespace VmProjectBE.Controllers.v1
                                           on sec.CourseId equals c.CourseId
                                           join sem in _context.Semesters
                                           on sec.SemesterId equals sem.SemesterId
-                                          join t in _context.Tags
-                                          on c.CourseCode equals t.TagName
-                                          join tc in _context.TagCategories
-                                          on t.TagCategoryId equals tc.TagCategoryId
-                                          join vtt in _context.VmTemplateTags
-                                          on t.TagId equals vtt.TagId
-                                          join vt in _context.VmTemplates
-                                          on vtt.VmTemplateId equals vt.VmTemplateId
+    
                                           where usr.UserSectionRoleId == enrollmentId
-                                          && tc.TagCategoryName == "Course"
+
                                           select new CreateVmDTO(
                                               $"{u.FirstName} {u.LastName}",
                                               sec.SectionName,
                                               c.CourseId,
-                                              vt.VmTemplateVcenterId,
                                               sem.SemesterTerm,
                                               usr.UserSectionRoleId,
                                               f.VcenterFolderId,
-                                              vt.LibraryVCenterId
+                                              sec.LibraryVCenterId
                                           )).ToList();
 
             return Ok(createVm);
