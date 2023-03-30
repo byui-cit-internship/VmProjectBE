@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VmProjectBE.DAL;
 
@@ -11,9 +12,10 @@ using VmProjectBE.DAL;
 namespace Database_VmProject.Migrations
 {
     [DbContext(typeof(VmEntities))]
-    partial class VmEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20230329205823_dropColumn")]
+    partial class dropColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -741,10 +743,10 @@ namespace Database_VmProject.Migrations
                         .HasColumnName("vm_instance_vcenter_name")
                         .HasColumnOrder(3);
 
-                    b.Property<string>("VmTemplateId")
+                    b.Property<string>("VmTemplateId2")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("vm_template_id")
+                        .HasColumnName("vm_template_id2")
                         .HasColumnOrder(2);
 
                     b.HasKey("VmInstanceId");
