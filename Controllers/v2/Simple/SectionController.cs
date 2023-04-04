@@ -112,14 +112,17 @@ namespace VmProjectBE.Controllers.v2
                                      where usr.UserSectionRoleId == userSectionRoleId
                                      select s).FirstOrDefault());
                             case "userId":
+                                
                                 return Ok(
                                     (from s in _context.Sections
                                      join usr in _context.UserSectionRoles
                                      on s.SectionId equals usr.SectionId
                                      join course in _context.Courses
                                      on s.CourseId equals course.CourseId
+                                     join vm in _context.VmInstances
+                                     on s.SectionId equals vm.SectionId
                                      where usr.UserId == userId
-                                     select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId}).ToList());
+                                     select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId, vmCount =(from vm in _context.VmInstances where vm.SectionId==s.SectionId select vm).Count()}).ToList());
                             default:
                                 return BadRequest("How did you get here?");
                         }
