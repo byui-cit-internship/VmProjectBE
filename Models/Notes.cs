@@ -16,7 +16,7 @@ namespace VmProjectBE.Models
         [Column("note", TypeName = "varchar(max)", Order = 2)]
         public string NoteDetail { get; set; }
 
-        [ForeignKey("SectionId")]
-        public VmInstance SectionId { get; set; }
+        [ForeignKey("section_id")]
+        public Section Section { get; set; }
     }
 }
