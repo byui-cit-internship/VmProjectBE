@@ -57,13 +57,19 @@ namespace VmProjectBE.Controllers.v1
                                                 && sem.EnrollmentTermCanvasId == semester
                                                 select new SectionDTO(
                                                     c.CourseCode,
+                                                    c.CourseId,
+                                                    sec.FolderId,
                                                     sec.SectionName,
                                                     sec.SectionId,
                                                     sem.SemesterTerm,
+                                                    sem.SemesterId,
                                                     sec.SectionNumber,
                                                     $"{u.FirstName} {u.LastName}",
-                                                    sec.LibraryVCenterId
-                                                )).ToList();
+                                                    sec.LibraryVCenterId,
+                                                    sec.ResourcePoolId,
+                                                    sec.SectionCanvasId,
+                                                    0
+                                                )).Distinct().ToList();
 
                 return Ok(sectionList);
             }
