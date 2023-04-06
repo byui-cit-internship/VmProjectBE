@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VmProjectBE.DAL;
 using VmProjectBE.Models;
+using VmProjectBE.DTO.v1;
 
 namespace VmProjectBE.Controllers.v2
 {
@@ -112,9 +113,7 @@ namespace VmProjectBE.Controllers.v2
                                      where usr.UserSectionRoleId == userSectionRoleId
                                      select s).FirstOrDefault());
                             case "userId":
-                                
-                                return Ok(
-                                    (from s in _context.Sections
+                                    var userSections = (from s in _context.Sections
                                      join usr in _context.UserSectionRoles
                                      on s.SectionId equals usr.SectionId
                                      join course in _context.Courses
@@ -122,7 +121,18 @@ namespace VmProjectBE.Controllers.v2
                                      join vm in _context.VmInstances
                                      on s.SectionId equals vm.SectionId
                                      where usr.UserId == userId
-                                     select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId, vmCount =(from vm in _context.VmInstances where vm.SectionId==s.SectionId select vm).Count()}).ToList());
+                                     select new SectionDTO(course.CourseCode, s.SectionName, s.SectionId, s.Semester.SemesterTerm, s.SectionNumber, s.SectionName, s.LibraryVCenterId,0)).ToList();
+
+                                    userSections.ForEach( userSection=>{
+                                        var vmCount =(from vm in _context.VmInstances where vm.SectionId==userSection.sectionId select vm).Count();
+
+
+                                        userSection.vmCount=vmCount;
+                                    });
+
+
+                                return Ok(userSections);
+                                    
                             default:
                                 return BadRequest("How did you get here?");
                         }
