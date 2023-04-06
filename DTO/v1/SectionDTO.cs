@@ -9,6 +9,7 @@
         public int sectionNumber;
         public string fullName;
         public string LibraryVCenterId;
+        public int vmCount;
 
         public SectionDTO(string courseCode, string sectionName, int sectionId, string semesterTerm, int sectionNumber, string fullName, string LibraryVCenterId)
         {
@@ -19,6 +20,7 @@
             this.sectionNumber = sectionNumber;
             this.fullName = fullName;
             this.LibraryVCenterId = LibraryVCenterId;
+            this.vmCount = vmCount;
         }
     }
 }

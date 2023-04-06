@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VmProjectBE.DAL;
 using VmProjectBE.Models;
+using VmProjectBE.DTO.v1;
 
 namespace VmProjectBE.Controllers.v2
 {
@@ -112,17 +113,34 @@ namespace VmProjectBE.Controllers.v2
                                      where usr.UserSectionRoleId == userSectionRoleId
                                      select s).FirstOrDefault());
                             case "userId":
-                                
-                                return Ok(
-                                    (from s in _context.Sections
+                                var userSectionsWithoutVMCount = (from s in _context.Sections
                                      join usr in _context.UserSectionRoles
                                      on s.SectionId equals usr.SectionId
                                      join course in _context.Courses
                                      on s.CourseId equals course.CourseId
-                                     join vm in _context.VmInstances
-                                     on s.SectionId equals vm.SectionId
                                      where usr.UserId == userId
-                                     select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId, vmCount =(from vm in _context.VmInstances where vm.SectionId==s.SectionId select vm).Count()}).ToList());
+                                     select new{SectionDTO(course.CourseCode, userSection.SectionName, userSection.sectionId, userSection.sectionNumber, userSection.fullName, userSection.LibraryVCenterId, userSection.CourseId, userSection.FolderId, userSection.ResourcePoolId, userSection.SectionCanvasId, userSection.SemesterId, usr.UserSectionRoleId,0)).ToList();
+                                
+                                userSectionsWithoutVMCount.ForEach(userSection=>{
+	                                var count = vmCount =(from vm in _context.VmInstances where vm.SectionId==userSection.sectionId select vm).Count();
+	                                userSection.vmCount=vmCount;
+                                });
+                                
+                                // return Ok(
+                                //     (from s in _context.Sections
+                                //      join usr in _context.UserSectionRoles
+                                //      on s.SectionId equals usr.SectionId
+                                //      join course in _context.Courses
+                                //      on s.CourseId equals course.CourseId
+                                //     //  join vm in _context.VmInstances
+                                //     //  on s.SectionId equals vm.SectionId
+                                //     //  into vmSections 
+                                //     where usr.UserId == userId
+                                //     //  from vmSection in vmSections.DefaultIfEmpty()
+                                //     //  select new{
+                                //     //     course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId, vmCount = vmSection?.instanceId?? 0
+                                //     //  }
+                                //      select new{course.CourseCode, s.CourseId, s.LibraryVCenterId, s.FolderId, s.ResourcePoolId, s.SectionCanvasId, s.SectionId, s.SectionName, s.SectionNumber, s.SemesterId, usr.UserSectionRoleId/*, vmCount =(from vm in _context.VmInstances where vm.SectionId==s.SectionId select vm).Count()*/}).ToList());
                             default:
                                 return BadRequest("How did you get here?");
                         }
