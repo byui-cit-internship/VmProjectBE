@@ -116,12 +116,15 @@ namespace VmProjectBE.Controllers.v2
                                     var userSections = (from s in _context.Sections
                                      join usr in _context.UserSectionRoles
                                      on s.SectionId equals usr.SectionId
+                                     join u in _context.Users
+                                                on usr.UserId equals u.UserId
                                      join course in _context.Courses
                                      on s.CourseId equals course.CourseId
                                      join vm in _context.VmInstances
                                      on s.SectionId equals vm.SectionId
                                      where usr.UserId == userId
-                                     select new SectionDTO(course.CourseCode, s.SectionName, s.SectionId, s.Semester.SemesterTerm, s.SectionNumber, s.SectionName, s.LibraryVCenterId,0)).ToList();
+                                     select new SectionDTO(course.CourseCode,course.CourseId, s.FolderId, s.SectionName, s.SectionId, s.Semester.SemesterTerm, s.Semester.SemesterId, s.SectionNumber,
+                                     $"{u.FirstName} {u.LastName}", s.LibraryVCenterId, s.ResourcePoolId, s.SectionCanvasId,0)).Distinct().ToList();
 
                                     userSections.ForEach( userSection=>{
                                         var vmCount =(from vm in _context.VmInstances where vm.SectionId==userSection.sectionId select vm).Count();
