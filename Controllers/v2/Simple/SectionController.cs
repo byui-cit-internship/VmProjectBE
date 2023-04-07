@@ -120,8 +120,6 @@ namespace VmProjectBE.Controllers.v2
                                                 on usr.UserId equals u.UserId
                                      join course in _context.Courses
                                      on s.CourseId equals course.CourseId
-                                     join vm in _context.VmInstances
-                                     on s.SectionId equals vm.SectionId
                                      where usr.UserId == userId
                                      select new SectionDTO(course.CourseCode,course.CourseId, s.FolderId, s.SectionName, s.SectionId, s.Semester.SemesterTerm, s.Semester.SemesterId, s.SectionNumber,
                                      $"{u.FirstName} {u.LastName}", s.LibraryVCenterId, s.ResourcePoolId, s.SectionCanvasId,0)).Distinct().ToList();
