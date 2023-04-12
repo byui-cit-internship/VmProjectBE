@@ -14,9 +14,12 @@
         public string LibraryVCenterId;
         public int resourcePoolId;
         public int sectionCanvasId;
+        public int sectionRoleId;
         public int vmCount;
 
-        public SectionDTO(string courseCode, int courseId, int folderId, string sectionName, int sectionId, string semesterTerm, int semesterId, int sectionNumber, string fullName, string LibraryVCenterId, int resourcePoolId, int sectionCanvasId, int vmCount=0)
+        
+
+        public SectionDTO(string courseCode, int courseId, int folderId, string sectionName, int sectionId, string semesterTerm, int semesterId, int sectionNumber, string fullName, string LibraryVCenterId, int resourcePoolId, int sectionCanvasId, int sectionRoleId, int vmCount=0)
         {
             this.courseCode = courseCode;
             this.courseId = courseId;
@@ -30,6 +33,7 @@
             this.LibraryVCenterId = LibraryVCenterId;
             this.resourcePoolId = resourcePoolId;
             this.sectionCanvasId = sectionCanvasId;
+            this.sectionRoleId = sectionRoleId;
             this.vmCount = vmCount;
         }
     }

@@ -122,7 +122,7 @@ namespace VmProjectBE.Controllers.v2
                                      on s.CourseId equals course.CourseId
                                      where usr.UserId == userId
                                      select new SectionDTO(course.CourseCode,course.CourseId, s.FolderId, s.SectionName, s.SectionId, s.Semester.SemesterTerm, s.Semester.SemesterId, s.SectionNumber,
-                                     $"{u.FirstName} {u.LastName}", s.LibraryVCenterId, s.ResourcePoolId, s.SectionCanvasId,0)).Distinct().ToList();
+                                     $"{u.FirstName} {u.LastName}", s.LibraryVCenterId, s.ResourcePoolId, s.SectionCanvasId,usr.UserSectionRoleId, 0)).Distinct().ToList();
 
                                     userSections.ForEach( userSection=>{
                                         var vmCount =(from vm in _context.VmInstances where vm.SectionId==userSection.sectionId select vm).Count();
