@@ -29,9 +29,8 @@ namespace VmProjectBE.Controllers.v2
         }
         [HttpGet("")]
         public async Task<ActionResult> GetNote(
-            [FromQuery] int notesId,
-            [FromQuery] string noteDetail,
-            [FromQuery] int  section)
+            [FromQuery] int? notesId,
+            [FromQuery] int?  sectionId)
         {
             string bffPassword = _configuration.GetConnectionString("BFF_PASSWORD");
             bool isSystem = bffPassword == _vimaCookie;
@@ -42,8 +41,7 @@ namespace VmProjectBE.Controllers.v2
             {
                 List<string> validParameters = QueryParamHelper.ValidateParameters(
                     ("notesId", notesId),
-                    ("noteDetail", noteDetail),
-                    ("setion", section));
+                    ("sectionId", sectionId));
                 switch (validParameters.Count)
                 {
                     case 0 : 
@@ -53,19 +51,20 @@ namespace VmProjectBE.Controllers.v2
                     case 1 : 
                         switch (validParameters[0])
                         {
-                            case "noteId":
+                            case "notesId":
                                 return Ok(
                                     (from n in _context.Notes
                                      where n.NotesId == notesId
                                      select n).FirstOrDefault());
-                            case "noteDetail":
+                                     
+                            case "sectionId":
                                 return Ok(
                                     (from n in _context.Notes
-                                     where n.NoteDetail == noteDetail
+                                     where n.Section.SectionId == sectionId
                                      select n).FirstOrDefault());
-                                
 
-                                
+                            default:
+                                return BadRequest("Incorrect parameters entered");
                         }
                     default:
                         return BadRequest("Incorrect parameters entered");
