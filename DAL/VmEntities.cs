@@ -47,6 +47,7 @@ namespace VmProjectBE.DAL
         public DbSet<VmInstanceVswitch> VmInstanceVswitches { get; set; }
         public DbSet<Vswitch> Vswitches { get; set; }
         public DbSet<VswitchTag> VswitchTags { get; set; }
+        public DbSet<Note> Notes {get; set;}
 
         public object Configuration { get; }
     }
