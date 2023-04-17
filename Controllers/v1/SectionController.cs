@@ -67,7 +67,7 @@ namespace VmProjectBE.Controllers.v1
                                                     $"{u.FirstName} {u.LastName}",
                                                     sec.LibraryVCenterId,
                                                     sec.ResourcePoolId,
-                                                    sec.SectionCanvasId,
+                                                    sec.SectionCanvasId, usr.UserSectionRoleId,
                                                     0
                                                 )).Distinct().ToList();
 
